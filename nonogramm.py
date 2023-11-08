@@ -7,17 +7,18 @@ class Grille():
         self.tailleColonne=0
         self.numColonne={}
         self.numLigne={}
-        self.lignes=[]
-        self.colonnes=[]
+        self.lignes=[[]]
+        self.colonnes=[[]]
     
     def creerGrilleHasard(self,tailleLigne,tailleColonne):
         self.tailleLigne=tailleLigne
         self.tailleColonne=tailleColonne
+        
         for i in range(tailleLigne):
             for j in range(tailleColonne):
                 self.lignes[i].append(bool(randint(0,1)))
             self.lignes.append([])
-        print(self.lignes)
+        self.lignes=self.lignes[:-1]
             
 
     def compteTotalCase(self,numeroLigne):
@@ -34,4 +35,4 @@ class Grille():
                     pass
 
 grille=Grille()
-grille.creerGrilleHasard(1,1)
+grille.creerGrilleHasard(2,2)
