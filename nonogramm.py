@@ -8,7 +8,7 @@ class Grille():
         self.numColonne={}
         self.numLigne={}
         self.lignes=[[]]
-        self.colonnes=[[]]
+
     
     def creerGrilleHasard(self,tailleLigne,tailleColonne):
         self.tailleLigne=tailleLigne
@@ -19,7 +19,8 @@ class Grille():
                 self.lignes[i].append(bool(randint(0,1)))
             self.lignes.append([])
         self.lignes=self.lignes[:-1]
-            
+
+
 
     def compteTotalCase(self,numeroLigne):
         tempo=0
@@ -29,10 +30,13 @@ class Grille():
         return tempo
     
     def resoudLigne(self,numeroLigne):
+        self.lignes[numeroLigne]=[]
         if self.compteTotalCase(numeroLigne)==self.tailleLigne:
             for i in self.numLigne[numeroLigne]:
-                for j in range(i):
-                    pass
+                self.lignes[numeroLigne]+=i*[True]+[False]
+            self.lignes[numeroLigne]=self.lignes[numeroLigne][:-1]
+
+                
 
 grille=Grille()
 grille.creerGrilleHasard(2,2)
