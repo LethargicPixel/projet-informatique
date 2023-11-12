@@ -9,7 +9,7 @@ class Grille():
         self.numLigne={}
         self.lignes=[[]]
 
-    
+
     def creerGrilleHasard(self,tailleLigne,tailleColonne):
         self.tailleLigne=tailleLigne
         self.tailleColonne=tailleColonne
@@ -19,6 +19,26 @@ class Grille():
                 self.lignes[i].append(bool(randint(0,1)))
             self.lignes.append([])
         self.lignes=self.lignes[:-1]
+
+    def indexer(self):
+        tempo=self.lignes[:]
+        for i in range(len(tempo)):
+            compte=0
+            self.numLigne[i]=[]
+            for y in tempo[i]:
+                if compte!=compte+y:
+                    compte+=1
+                else:
+                    self.numLigne[i].append(compte)
+                    compte=0
+            self.numLigne[i].append(compte)
+        
+        for i in self.numLigne:
+            while True:
+                try:
+                    self.numLigne[i].remove(0)
+                except:
+                    break
 
 
 
@@ -40,3 +60,7 @@ class Grille():
 
 grille=Grille()
 grille.creerGrilleHasard(2,2)
+grille.indexer()
+print(grille.lignes)
+print("\n\n\n")
+print(grille.numLigne)
