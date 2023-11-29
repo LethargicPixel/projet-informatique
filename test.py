@@ -13,6 +13,14 @@ class Case:
             case _:
                 return " "
 
+    def __repr__(self) -> str:
+        match self._valeur:
+            case True :
+                return "O"
+            case False:
+                return "X"
+            case _:
+                return " "
 
     def valeur(self):
         return self._valeur
