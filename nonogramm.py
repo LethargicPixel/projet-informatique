@@ -1,24 +1,25 @@
 from random import randint
 class Case:
-    
+    vrai="|"
+    faux="O"
     def __init__(self, valeur=None):
         self._valeur=valeur
 
     def __str__(self):
         match self._valeur:
             case True :
-                return "O"
+                return Case.vrai
             case False:
-                return "X"
+                return Case.faux
             case _:
                 return " "
 
     def __repr__(self) -> str:
         match self._valeur:
             case True :
-                return "O"
+                return Case.vrai
             case False:
-                return "X"
+                return Case.faux
             case _:
                 return " "
             
@@ -38,9 +39,9 @@ class Grille:
         
         self.tailleLigne=0
         self.tailleColonne=0
-        self.numColonne={}
-        self.numLigne={}
+        self._position={}
         self.lignes=[[]]
+        self.colonnes=[[]]
 
 
     def creerGrilleHasard(self,tailleLigne,tailleColonne):
@@ -50,31 +51,43 @@ class Grille:
         for i in range(tailleLigne):
             for j in range(tailleColonne):
                 self.lignes[i].append(Case(bool(randint(0,1))))
-                print(self.lignes[i])
             self.lignes.append([])
         self.lignes=self.lignes[:-1]
-
-    def indexer(self):
-        tempo=self.lignes[:]
+        
+        for i in range(tailleColonne):
+            for j in range(tailleLigne):
+                self.colonnes[i].append(self.lignes[j][i])
+            self.colonnes.append([])
+        self.colonnes=self.colonnes[:-1]
+        
+        
+    def _positions(self,liste):
+        tempo=liste[:]
+        result={}
         for i in range(len(tempo)):
             compte=0
-            self.numLigne[i]=[]
+            result[i]=[]
             for y in tempo[i]:
                 if compte!=compte+y.valeur():
                     compte+=1
                 else:
-                    self.numLigne[i].append(compte)
+                    result[i].append(compte)
                     compte=0
-            self.numLigne[i].append(compte)
+            result[i].append(compte)
         
-        for i in self.numLigne:
+        for i in result:
             while True:
                 try:
-                    self.numLigne[i].remove(0)
+                    result[i].remove(0)
                 except:
                     break
+        return result
+    
+    def positionsFinal(self):
+        self._position= {"colonne":self._positions(self.colonnes),"ligne":self._positions(self.lignes)}
 
-
+    def position(self):
+        return self._position
 
     def compteTotalCase(self,numeroLigne):
         tempo=0
@@ -94,8 +107,22 @@ class Grille:
 
 grille=Grille()
 grille.creerGrilleHasard(5,5)
-grille.indexer()
-"""
-print(grille.lignes)
-print("\n\n\n")"""
-print(grille.numLigne)
+grille.positionsFinal()
+
+for i in grille.lignes:
+    print(i)
+print()
+
+for i in grille.colonnes:
+    print(i)
+print("e")
+
+grille.colonnes[0][0].transformeFaux()
+
+for i in grille.lignes:
+    print(i)
+print()
+
+for i in grille.colonnes:
+    print(i)
+print()

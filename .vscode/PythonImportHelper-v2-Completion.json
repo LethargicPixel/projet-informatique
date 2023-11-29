@@ -20,7 +20,7 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Case:\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:\n            case True :\n                return \"O\"\n            case False:\n                return \"X\"\n            case _:",
+        "peekOfCode": "class Case:\n    vrai=\"|\"\n    faux=\"O\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:\n            case True :\n                return Case.vrai\n            case False:",
         "detail": "nonogramm",
         "documentation": {}
     },
@@ -29,7 +29,7 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self.numColonne={}\n        self.numLigne={}\n        self.lignes=[[]]\n    def creerGrilleHasard(self,tailleLigne,tailleColonne):\n        self.tailleLigne=tailleLigne\n        self.tailleColonne=tailleColonne",
+        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self._position={}\n        self.lignes=[[]]\n        self.colonnes=[[]]\n    def creerGrilleHasard(self,tailleLigne,tailleColonne):\n        self.tailleLigne=tailleLigne\n        self.tailleColonne=tailleColonne",
         "detail": "nonogramm",
         "documentation": {}
     },
