@@ -1,5 +1,22 @@
 from random import randint
+class Case():
+    def __init__(self, valeur=None):
+        self._valeur=valeur
 
+    def __str__(self):
+        return self._valeur
+
+    def valeur(self):
+        return self._valeur
+    
+    def transformeVrai(self):
+        self._valeur=True
+    
+    def transformeFaux(self):
+        self._valeur=False
+        
+        
+        
 class Grille():
     def __init__(self) -> None:
         
@@ -16,7 +33,8 @@ class Grille():
         
         for i in range(tailleLigne):
             for j in range(tailleColonne):
-                self.lignes[i].append(bool(randint(0,1)))
+                self.lignes[i].append(Case(bool(randint(0,1))))
+                print(self.lignes[i])
             self.lignes.append([])
         self.lignes=self.lignes[:-1]
 
@@ -26,7 +44,7 @@ class Grille():
             compte=0
             self.numLigne[i]=[]
             for y in tempo[i]:
-                if compte!=compte+y:
+                if compte!=compte+y.valeur():
                     compte+=1
                 else:
                     self.numLigne[i].append(compte)
@@ -59,8 +77,9 @@ class Grille():
                 
 
 grille=Grille()
-grille.creerGrilleHasard(2,2)
+grille.creerGrilleHasard(5,5)
 grille.indexer()
+"""
 print(grille.lignes)
 print("\n\n\n")
-print(grille.numLigne)
+print(grille.numLigne)"""
