@@ -1,13 +1,30 @@
-class MaClasse:
-    def __init__(self, attribut1, attribut2):
-        self.attribut1 = attribut1
-        self.attribut2 = attribut2
+from random import randint
+class Case:
+    
+    def __init__(self, valeur=None):
+        self._valeur=valeur
 
-    def __bool__(self):
-        return True
+    def __str__(self):
+        match self._valeur:
+            case True :
+                return "O"
+            case False:
+                return "X"
+            case _:
+                return " "
 
-# Création d'une instance de la classe
-objet = MaClasse(attribut1="Valeur1", attribut2="Valeur2")
 
-# Affichage en imprimant l'objet (la classe)
-print(objet)
+    def valeur(self):
+        return self._valeur
+    
+    def transformeVrai(self):
+        self._valeur=True
+    
+    def transformeFaux(self):
+        self._valeur=False
+        
+a=Case(bool(randint(0,1)))
+b=Case(bool(randint(0,1)))
+
+c=[a,b]
+print(c)

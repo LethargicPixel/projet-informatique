@@ -1,10 +1,18 @@
 from random import randint
-class Case():
+class Case:
+    
     def __init__(self, valeur=None):
         self._valeur=valeur
 
     def __str__(self):
-        return self._valeur
+        match self._valeur:
+            case True :
+                return "O"
+            case False:
+                return "X"
+            case _:
+                return " "
+
 
     def valeur(self):
         return self._valeur
@@ -17,7 +25,7 @@ class Case():
         
         
         
-class Grille():
+class Grille:
     def __init__(self) -> None:
         
         self.tailleLigne=0
@@ -81,5 +89,5 @@ grille.creerGrilleHasard(5,5)
 grille.indexer()
 """
 print(grille.lignes)
-print("\n\n\n")
-print(grille.numLigne)"""
+print("\n\n\n")"""
+print(grille.numLigne)
