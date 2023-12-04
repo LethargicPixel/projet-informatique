@@ -95,7 +95,7 @@ class Grille:
                     break
         return result
     
-    def positionsFinal(self):
+    def _positionsFinal(self):
         self._position= {Grille.colonne:self._positions(self.colonnes),Grille.ligne:self._positions(self.lignes)}
         tempo=self.lignes
         for i in self.lignes:
@@ -106,7 +106,7 @@ class Grille:
     def position(self):
         return self._position
 
-    def compteTotalCase(self,type,index):
+    def _compteTotalCase(self,type,index):
         indexs=self._position[type][index]
         tempo=0
         for i in indexs:
@@ -114,12 +114,12 @@ class Grille:
         tempo+=len(indexs)-1
         return tempo
     
-    def comptePlaceLibre(self,type:str,index:int):
+    def _comptePlaceLibre(self,type:str,index:int):
         liste=self.grille[type]
         liste=liste[index]
         tempo=0
         for i in liste:
-            if i.valeur() == None or i.valeur()==True :
+            if i.valeur() == None or i.valeur()==False :
                 tempo+=1
         return tempo
                 
@@ -128,13 +128,29 @@ class Grille:
         liste=self.grille[type][index]
         indexs=self._position[type][index]
         
-        nbLibres=self.comptePlaceLibre(type,index)
-        nbARemplir=self.compteTotalCase(type,index)
+        nbLibres=self.__comptePlaceLibre(type,index)
+        nbARemplir=self.__compteTotalCase(type,index)
+        
+        compteur=0
+        
+        print(f"index={indexs}\nnbLibre={nbLibres}\nnbARemplir={nbARemplir}")
         
         if indexs==[nbARemplir]:
             for i in liste:
                 if i.valeur()==None:
                     i.transformeVrai()
+                    
+        elif nbLibres==nbARemplir:
+            for i in indexs:
+                for j in range(i):
+                    liste[compteur].transformeVrai()
+                    compteur+=1
+
+                if compteur<len(liste):
+                    liste[compteur].transformeFaux()
+                    compteur+=1
+ 
+        
                     
             
         
@@ -143,22 +159,3 @@ class Grille:
 
 grille=Grille()
 grille.creerGrilleHasard(5,5)
-for i in range(5):
-    grille.lignes[0][i].transformeVrai()
-grille.lignes[0][-1].transformeFaux()
-
-
-for i in grille.lignes:
-    print(i)
-
-
-print()
-print(grille.positionsFinal()[0],"\n")
-grille.lignes[0][0].transformeFaux()
-for i in grille.lignes:
-    print(i)
-    
-grille.remplis(Grille.ligne,0)
-print()
-for i in grille.lignes:
-    print(i)
