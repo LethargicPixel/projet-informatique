@@ -34,15 +34,24 @@ class Case:
         
         
         
+        
+        
+        
+        
 class Grille:
+    
+    colonne="colonne"
+    ligne="ligne"
+    
     def __init__(self) -> None:
+        
         
         self.tailleLigne=0
         self.tailleColonne=0
         self._position={}
         self.lignes=[[]]
         self.colonnes=[[]]
-
+        self.grille={}
 
     def creerGrilleHasard(self,tailleLigne,tailleColonne):
         self.tailleLigne=tailleLigne
@@ -59,6 +68,8 @@ class Grille:
                 self.colonnes[i].append(self.lignes[j][i])
             self.colonnes.append([])
         self.colonnes=self.colonnes[:-1]
+        
+        self.grille={Grille.colonne:self.colonnes,Grille.ligne:self.lignes}
         
         
     def _positions(self,liste):
@@ -89,19 +100,27 @@ class Grille:
     def position(self):
         return self._position
 
-    def compteTotalCase(self,numeroLigne):
+    def compteTotalCase(self,type,index):
+        indexs=self._position[type][index]
         tempo=0
-        for i in self.numLigne[numeroLigne]:
+        for i in self.numLigne[indexs]:
             tempo+=i
-        tempo+=len(self.numLigne[numeroLigne])-1
+        tempo+=len(self.numLigne[indexs])-1
         return tempo
     
-    def resoudLigne(self,numeroLigne):
-        self.lignes[numeroLigne]=[]
-        if self.compteTotalCase(numeroLigne)==self.tailleLigne:
-            for i in self.numLigne[numeroLigne]:
-                self.lignes[numeroLigne]+=i*[True]+[False]
-            self.lignes[numeroLigne]=self.lignes[numeroLigne][:-1]
+    def comptePlaceLibre(self,type,index):
+        liste=self.grille[type][index]
+        tempo=0
+        for i in liste:
+            if i.valeur() == None or i.valeur()==True :
+                tempo+=1
+        return tempo
+                
+    def remplis(self,type,index):
+        liste=self.grille[type][index]
+        nbLibres=self.comptePlaceLibre(type,index)
+        nbARemplir=self.compteTotalCase(type,index)
+        
 
                 
 
@@ -109,20 +128,3 @@ grille=Grille()
 grille.creerGrilleHasard(5,5)
 grille.positionsFinal()
 
-for i in grille.lignes:
-    print(i)
-print()
-
-for i in grille.colonnes:
-    print(i)
-print("e")
-
-grille.colonnes[0][0].transformeFaux()
-
-for i in grille.lignes:
-    print(i)
-print()
-
-for i in grille.colonnes:
-    print(i)
-print()
