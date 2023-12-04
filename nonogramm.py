@@ -145,9 +145,10 @@ grille=Grille()
 grille.creerGrilleHasard(5,5)
 for i in range(5):
     grille.lignes[0][i].transformeVrai()
-    
+grille.lignes[0][-1].transformeFaux()
 for i in grille.lignes:
     print(i)
+
 
 print()
 print(grille.positionsFinal()[0],"\n")
