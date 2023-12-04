@@ -32,7 +32,8 @@ class Case:
     def transformeFaux(self):
         self._valeur=False
         
-        
+    def vider(self):
+        self._valeur=None
         
         
         
@@ -95,7 +96,12 @@ class Grille:
         return result
     
     def positionsFinal(self):
-        self._position= {"colonne":self._positions(self.colonnes),"ligne":self._positions(self.lignes)}
+        self._position= {Grille.colonne:self._positions(self.colonnes),Grille.ligne:self._positions(self.lignes)}
+        tempo=self.lignes
+        for i in self.lignes:
+            for y in i:
+                y.vider()            
+        return self._position,tempo
 
     def position(self):
         return self._position
@@ -103,13 +109,14 @@ class Grille:
     def compteTotalCase(self,type,index):
         indexs=self._position[type][index]
         tempo=0
-        for i in self.numLigne[indexs]:
+        for i in indexs:
             tempo+=i
-        tempo+=len(self.numLigne[indexs])-1
+        tempo+=len(indexs)-1
         return tempo
     
-    def comptePlaceLibre(self,type,index):
-        liste=self.grille[type][index]
+    def comptePlaceLibre(self,type:str,index:int):
+        liste=self.grille[type]
+        liste=liste[index]
         tempo=0
         for i in liste:
             if i.valeur() == None or i.valeur()==True :
@@ -117,14 +124,37 @@ class Grille:
         return tempo
                 
     def remplis(self,type,index):
+        
         liste=self.grille[type][index]
+        indexs=self._position[type][index]
+        
         nbLibres=self.comptePlaceLibre(type,index)
         nbARemplir=self.compteTotalCase(type,index)
+        
+        if indexs==[nbARemplir]:
+            for i in liste:
+                if i.valeur()==None:
+                    i.transformeVrai()
+                    print(i)
+            
         
 
                 
 
 grille=Grille()
 grille.creerGrilleHasard(5,5)
-grille.positionsFinal()
+for i in range(5):
+    grille.lignes[0][i].transformeVrai()
+    
+for i in grille.lignes:
+    print(i)
 
+print()
+print(grille.positionsFinal()[0],"\n")
+for i in grille.lignes:
+    print(i)
+    
+grille.remplis(Grille.ligne,0)
+print()
+for i in grille.lignes:
+    print(i)
