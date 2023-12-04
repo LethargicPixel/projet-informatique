@@ -135,7 +135,7 @@ class Grille:
             for i in liste:
                 if i.valeur()==None:
                     i.transformeVrai()
-                    print(i)
+                    
             
         
 
@@ -146,12 +146,15 @@ grille.creerGrilleHasard(5,5)
 for i in range(5):
     grille.lignes[0][i].transformeVrai()
 grille.lignes[0][-1].transformeFaux()
+
+
 for i in grille.lignes:
     print(i)
 
 
 print()
 print(grille.positionsFinal()[0],"\n")
+grille.lignes[0][0].transformeFaux()
 for i in grille.lignes:
     print(i)
     
