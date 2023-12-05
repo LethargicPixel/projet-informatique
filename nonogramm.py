@@ -95,7 +95,7 @@ class Grille:
                     break
         return result
     
-    def _positionsFinal(self):
+    def positionsFinal(self):
         self._position= {Grille.colonne:self._positions(self.colonnes),Grille.ligne:self._positions(self.lignes)}
         tempo=self.lignes
         for i in self.lignes:
@@ -119,28 +119,30 @@ class Grille:
         liste=liste[index]
         tempo=0
         for i in liste:
-            if i.valeur() == None or i.valeur()==False :
+            if i.valeur() == None :
                 tempo+=1
         return tempo
                 
-    def remplis(self,type,index):
+    def remplis(self,type,indexs):
         
-        liste=self.grille[type][index]
-        indexs=self._position[type][index]
+        nbLibres=self._comptePlaceLibre(type,indexs)
+        nbARemplir=self._compteTotalCase(type,indexs)
+        liste=self.grille[type][indexs]
+        indexs=self._position[type][indexs]
+
         
-        nbLibres=self.__comptePlaceLibre(type,index)
-        nbARemplir=self.__compteTotalCase(type,index)
+        
         
         compteur=0
         
         print(f"index={indexs}\nnbLibre={nbLibres}\nnbARemplir={nbARemplir}")
         
-        if indexs==[nbARemplir]:
+        if indexs==[nbLibres]:
             for i in liste:
                 if i.valeur()==None:
                     i.transformeVrai()
                     
-        elif nbLibres==nbARemplir:
+        elif nbLibres==nbARemplir and len(indexs)>1:
             for i in indexs:
                 for j in range(i):
                     liste[compteur].transformeVrai()
@@ -149,13 +151,26 @@ class Grille:
                 if compteur<len(liste):
                     liste[compteur].transformeFaux()
                     compteur+=1
- 
-        
+                    
+        elif indexs>[nbLibres/2]:
+            
+            compteur=nbLibres-indexs[0]
+            print(compteur)
+            while liste[compteur].valeur==False:
+                compteur+=1
+            print(compteur)
+            print(compteur+(indexs[0]-nbLibres//2))
+            
+            if indexs[0]%2==nbLibres%2:
+                
+                for i in range(compteur,compteur+(indexs[0]-(nbLibres-1)//2)):
+                    print(i)
+                    liste[i].transformeVrai()
+            else:  
+                for i in range(compteur,1+compteur+(indexs[0]-(nbLibres-1)//2)):
+                    print(i)
+                    liste[i].transformeVrai()
                     
             
         
 
-                
-
-grille=Grille()
-grille.creerGrilleHasard(5,5)

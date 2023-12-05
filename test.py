@@ -1,38 +1,23 @@
-from random import randint
-class Case:
-    
-    def __init__(self, valeur=None):
-        self._valeur=valeur
+from nonogramm import Grille
 
-    def __str__(self):
-        match self._valeur:
-            case True :
-                return "O"
-            case False:
-                return "X"
-            case _:
-                return " "
+grille=Grille()
+grille.creerGrilleHasard(5,5)
+for i in range(5):
+    grille.lignes[0][i].transformeVrai()
+grille.lignes[0][-1].transformeFaux()
 
-    def __repr__(self) -> str:
-        match self._valeur:
-            case True :
-                return "O"
-            case False:
-                return "X"
-            case _:
-                return " "
+grille.lignes[0][-2].transformeFaux()
 
-    def valeur(self):
-        return self._valeur
-    
-    def transformeVrai(self):
-        self._valeur=True
-    
-    def transformeFaux(self):
-        self._valeur=False
-        
-a=Case(bool(randint(0,1)))
-b=Case(bool(randint(0,1)))
+for i in grille.lignes:
+    print(i)
 
-c=[a,b]
-print(c)
+
+print()
+print(grille.positionsFinal()[0],"\n")
+for i in grille.lignes:
+    print(i)
+
+grille.remplis(Grille.ligne,0)
+print()
+for i in grille.lignes:
+    print(i)
