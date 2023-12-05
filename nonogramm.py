@@ -97,11 +97,20 @@ class Grille:
     
     def positionsFinal(self):
         self._position= {Grille.colonne:self._positions(self.colonnes),Grille.ligne:self._positions(self.lignes)}
-        tempo=self.lignes
+        tempo=[[]]
+        for i in range(self.tailleLigne):
+          
+            for j in self.lignes[i]:
+            
+                tempo[i].append(j.valeur)
+            tempo.append([])
+        tempo=tempo[:-1]
+        
+
         for i in self.lignes:
             for y in i:
                 y.vider()            
-        return self._position,tempo
+        return tempo
 
     def position(self):
         return self._position
@@ -115,6 +124,7 @@ class Grille:
         return tempo
     
     def _comptePlaceLibre(self,type:str,index:int):
+
         liste=self.grille[type]
         liste=liste[index]
         tempo=0
@@ -135,7 +145,6 @@ class Grille:
         
         compteur=0
         
-        print(f"index={indexs}\nnbLibre={nbLibres}\nnbARemplir={nbARemplir}")
         
         if indexs==[nbLibres]:
             for i in liste:
@@ -152,25 +161,29 @@ class Grille:
                     liste[compteur].transformeFaux()
                     compteur+=1
                     
-        elif indexs>[nbLibres/2]:
+        elif indexs>[nbLibres/2] and len(indexs)==1:
             
             compteur=nbLibres-indexs[0]
-            print(compteur)
+
             while liste[compteur].valeur==False:
                 compteur+=1
-            print(compteur)
-            print(compteur+(indexs[0]-nbLibres//2))
+
+
             
             if indexs[0]%2==nbLibres%2:
                 
                 for i in range(compteur,compteur+(indexs[0]-(nbLibres-1)//2)):
-                    print(i)
+                   
                     liste[i].transformeVrai()
             else:  
                 for i in range(compteur,1+compteur+(indexs[0]-(nbLibres-1)//2)):
-                    print(i)
+                   
                     liste[i].transformeVrai()
-                    
+        elif not indexs:
+            for i in liste:
+                i.transformeFaux()            
             
-        
+    def afficher(self):
+        for i in self.lignes:
+            print(i)    
 

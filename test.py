@@ -1,23 +1,26 @@
 from nonogramm import Grille
 
-grille=Grille()
-grille.creerGrilleHasard(5,5)
-for i in range(5):
-    grille.lignes[0][i].transformeVrai()
-grille.lignes[0][-1].transformeFaux()
+aResoudre=Grille()
+aResoudre.creerGrilleHasard(5,5)
+aResoudre.afficher()
+resolu=aResoudre
+aResoudre.positionsFinal()
 
-grille.lignes[0][-2].transformeFaux()
+print("________________________________________________________________________________________________________________________________________")
+resolu.afficher()
 
-for i in grille.lignes:
+"""
+for i in aResoudre.lignes:
     print(i)
 
-
+aResoudre.remplis(Grille.ligne,0)
 print()
-print(grille.positionsFinal()[0],"\n")
-for i in grille.lignes:
+for i in aResoudre.lignes:
     print(i)
 
-grille.remplis(Grille.ligne,0)
-print()
-for i in grille.lignes:
-    print(i)
+
+
+    
+
+aResoudre.afficher()"""
+aResoudre.position()
