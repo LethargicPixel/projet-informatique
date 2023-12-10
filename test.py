@@ -1,14 +1,16 @@
 from nonogramm import Grille
 
 aResoudre=Grille()
+resolu=Grille()
+
 aResoudre.creerGrilleHasard(5,5)
 aResoudre.afficher()
-resolu=aResoudre
+resolu.lignes=aResoudre.copie()
 aResoudre.positionsFinal()
 
 print("________________________________________________________________________________________________________________________________________")
 resolu.afficher()
-
+aResoudre.afficher()
 """
 for i in aResoudre.lignes:
     print(i)

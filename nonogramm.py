@@ -54,6 +54,14 @@ class Grille:
         self.colonnes=[[]]
         self.grille={}
 
+    def copie(self):
+        tempo=[[]]
+        for i in range(len(self.lignes)):
+            for j in self.lignes[i]:
+                tempo[i].append(Case(j.valeur()))
+            tempo.append([])
+        return tempo[:-1]
+    
     def creerGrilleHasard(self,tailleLigne,tailleColonne):
         self.tailleLigne=tailleLigne
         self.tailleColonne=tailleColonne
