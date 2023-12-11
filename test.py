@@ -3,26 +3,25 @@ from nonogramm import Grille
 aResoudre=Grille()
 resolu=Grille()
 
-aResoudre.creerGrilleHasard(5,5)
+aResoudre.creerGrilleHasard(10,10)
 aResoudre.afficher()
 resolu.lignes=aResoudre.copie()
 aResoudre.positionsFinal()
-
+print(aResoudre.getPosition())
 print("________________________________________________________________________________________________________________________________________")
-resolu.afficher()
-aResoudre.afficher()
-"""
-for i in aResoudre.lignes:
+
+
+for i in range(len(aResoudre.lignes)):
+    aResoudre.remplis(Grille.ligne,i)
+    aResoudre.remplis(Grille.colonne,i)
+    aResoudre.afficher()
     print(i)
 
-aResoudre.remplis(Grille.ligne,0)
-print()
-for i in aResoudre.lignes:
-    print(i)
+
 
 
 
     
 
-aResoudre.afficher()"""
-aResoudre.position()
+aResoudre.afficher()
+aResoudre.getPosition()

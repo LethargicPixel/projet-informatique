@@ -23,7 +23,7 @@ class Case:
             case _:
                 return " "
             
-    def valeur(self):
+    def getValeur(self):
         return self._valeur
     
     def transformeVrai(self):
@@ -58,7 +58,7 @@ class Grille:
         tempo=[[]]
         for i in range(len(self.lignes)):
             for j in self.lignes[i]:
-                tempo[i].append(Case(j.valeur()))
+                tempo[i].append(Case(j.getValeur()))
             tempo.append([])
         return tempo[:-1]
     
@@ -81,19 +81,31 @@ class Grille:
         self.grille={Grille.colonne:self.colonnes,Grille.ligne:self.lignes}
         
         
+        
+        
+        
     def _positions(self,liste):
         tempo=liste[:]
         result={}
         for i in range(len(tempo)):
-            compte=0
-            result[i]=[]
-            for y in tempo[i]:
-                if compte!=compte+y.valeur():
-                    compte+=1
-                else:
-                    result[i].append(compte)
-                    compte=0
-            result[i].append(compte)
+            result[i]=self._positionParLigne(tempo[i])
+
+        return result
+    
+    
+    def _positionParLigne(self,liste):
+        compte=0
+        result=[]
+        for y in liste:
+            tempo=y.getValeur()
+            if tempo==None:tempo=0
+            
+            if compte!=compte+tempo:
+                compte+=1
+            else:
+                result.append(compte)
+                compte=0
+        result.append(compte)
         
         for i in result:
             while True:
@@ -101,7 +113,14 @@ class Grille:
                     result[i].remove(0)
                 except:
                     break
+        
         return result
+    
+    def egal(self,grille):
+        for i in range(self.tailleLigne):
+            for j in range(self.tailleColonne):
+                try:
+                    self.lignes[i][j].valeur
     
     def positionsFinal(self):
         self._position= {Grille.colonne:self._positions(self.colonnes),Grille.ligne:self._positions(self.lignes)}
@@ -110,7 +129,7 @@ class Grille:
           
             for j in self.lignes[i]:
             
-                tempo[i].append(j.valeur)
+                tempo[i].append(j.getValeur())
             tempo.append([])
         tempo=tempo[:-1]
         
@@ -120,7 +139,7 @@ class Grille:
                 y.vider()            
         return tempo
 
-    def position(self):
+    def getPosition(self):
         return self._position
 
     def _compteTotalCase(self,type,index):
@@ -135,10 +154,15 @@ class Grille:
 
         liste=self.grille[type]
         liste=liste[index]
-        tempo=0
-        for i in liste:
-            if i.valeur() == None :
-                tempo+=1
+        tempo=len(liste)
+        i=0
+        while liste[i]==False:
+            tempo-=1
+            i+=1
+        i=1
+        while liste[-i]==False:
+            tempo-=1
+            i+=1
         return tempo
                 
     def remplis(self,type,indexs):
@@ -147,16 +171,14 @@ class Grille:
         nbARemplir=self._compteTotalCase(type,indexs)
         liste=self.grille[type][indexs]
         indexs=self._position[type][indexs]
-
-        
-        
-        
+    
         compteur=0
+        
         
         
         if indexs==[nbLibres]:
             for i in liste:
-                if i.valeur()==None:
+                if i.getValeur()==None:
                     i.transformeVrai()
                     
         elif nbLibres==nbARemplir and len(indexs)>1:
@@ -173,10 +195,8 @@ class Grille:
             
             compteur=nbLibres-indexs[0]
 
-            while liste[compteur].valeur==False:
+            while liste[compteur].getValeur()==False:
                 compteur+=1
-
-
             
             if indexs[0]%2==nbLibres%2:
                 
@@ -187,9 +207,39 @@ class Grille:
                 for i in range(compteur,1+compteur+(indexs[0]-(nbLibres-1)//2)):
                    
                     liste[i].transformeVrai()
+                    
         elif not indexs:
             for i in liste:
-                i.transformeFaux()            
+                i.transformeFaux()
+                
+        elif indexs==self._positionParLigne(liste):
+            for i in liste:
+                if i.getValeur() == None:
+                    i.transformeFaux() 
+        
+        elif len(indexs)==1 and len(self._positionParLigne(liste))>1:
+            
+            print("oui")
+            print(type)
+            print(indexs)
+            print(self._positionParLigne(liste))
+            
+            
+            while (len(self._positionParLigne(liste))!=1):
+                i=0 
+                
+                while liste[i].getValeur()!=True:
+                    i+=1
+                    print(i)
+                while liste[i].getValeur()==True:
+                    i+=1
+                    print(i)
+                while liste[i].getValeur()==None:
+                    liste[i].transformeVrai()
+                    i+=1
+                    print(i)
+            
+
             
     def afficher(self):
         for i in self.lignes:
