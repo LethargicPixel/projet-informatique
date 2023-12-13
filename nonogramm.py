@@ -22,6 +22,11 @@ class Case:
                 return Case.faux
             case _:
                 return " "
+    
+    def __eq__(self,case2):
+        if isinstance(case2,Case):
+            return case2.getValeur()==self.getValeur()
+        return False
             
     def getValeur(self):
         return self._valeur
@@ -116,11 +121,17 @@ class Grille:
         
         return result
     
-    def egal(self,grille):
+    def grilleEgal(self,grille2):
         for i in range(self.tailleLigne):
             for j in range(self.tailleColonne):
                 try:
-                    self.lignes[i][j].valeur
+                    if self.lignes[i][j]!=grille2.lignes[i][j]:
+                        return False
+                except:
+                    return False
+
+                finally:
+                    return True
     
     def positionsFinal(self):
         self._position= {Grille.colonne:self._positions(self.colonnes),Grille.ligne:self._positions(self.lignes)}
