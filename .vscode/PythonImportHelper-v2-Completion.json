@@ -8,11 +8,52 @@
         "documentation": {}
     },
     {
-        "label": "randint",
-        "importPath": "random",
-        "description": "random",
+        "label": "system",
+        "importPath": "os",
+        "description": "os",
         "isExtraImport": true,
-        "detail": "random",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "sleep",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "perf_counter",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "Grille",
+        "importPath": "nonogramm",
+        "description": "nonogramm",
+        "isExtraImport": true,
+        "detail": "nonogramm",
+        "documentation": {}
+    },
+    {
+        "label": "Type",
+        "importPath": "nonogramm",
+        "description": "nonogramm",
+        "isExtraImport": true,
+        "detail": "nonogramm",
+        "documentation": {}
+    },
+    {
+        "label": "Type",
+        "kind": 6,
+        "importPath": "nonogramm",
+        "description": "nonogramm",
+        "peekOfCode": "class Type:\n    colonne=\"colonne\"\n    ligne=\"ligne\"\nclass Case:\n    vrai=\"|\"\n    faux=\"O\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:",
+        "detail": "nonogramm",
         "documentation": {}
     },
     {
@@ -29,17 +70,8 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Grille:\n    colonne=\"colonne\"\n    ligne=\"ligne\"\n    def __init__(self) -> None:\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self._position={}\n        self.lignes=[[]]\n        self.colonnes=[[]]\n        self.grille={}",
+        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self._position={}\n        self.lignes=[[]]\n        self.colonnes=[[]]\n        self.grille={}\n    def copie(self):\n        tempo=[[]]",
         "detail": "nonogramm",
-        "documentation": {}
-    },
-    {
-        "label": "Case",
-        "kind": 6,
-        "importPath": "test",
-        "description": "test",
-        "peekOfCode": "class Case:\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:\n            case True :\n                return \"O\"\n            case False:\n                return \"X\"\n            case _:",
-        "detail": "test",
         "documentation": {}
     }
 ]

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>Nonogramm</title>
+		<link rel="stylesheet" type="text/css" href="./style.css">
+		<script src="https://brython.info/brython.js"></script>
+		<script src="https://brython.info/brython_stdlib.js"></script>
+	</head>
+	<body>
+		<h1>Nonogramm</h1>
+		<div>
+			<p>methode de creation de la grille</p>
+		</div>
+		<div>
+			<input type="button" value="aleatoire" id="aleatoire" onclick="montreZone()">
+			<input type="button" value="importer" id="importer">
+		</div>
+		<div>
+			<p id="prevention" style="visibility: hidden;" >attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
+			<input type="number" name="rentrez la taille de la grille" id="taille" style="visibility: hidden;">
+		</div>
+	</body>
+</html>
+
+<script>
+
+	let btnAleatoire=document.getElementById("aleatoire")
+	let btnImport=document.getElementById("importer")
+	
+
+	function montreZone(){
+
+		document.getElementById("prevention").style="visible"
+		document.getElementById("taille").style.visibility="visible"
+		
+	}
+
+</script>

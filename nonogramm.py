@@ -1,4 +1,9 @@
 from random import randint
+class Type:
+    colonne="colonne"
+    ligne="ligne"
+    
+    
 class Case:
     vrai="|"
     faux="O"
@@ -46,8 +51,7 @@ class Case:
         
 class Grille:
     
-    colonne="colonne"
-    ligne="ligne"
+
     
     def __init__(self) -> None:
         
@@ -70,7 +74,8 @@ class Grille:
     def creerGrilleHasard(self,tailleLigne,tailleColonne):
         self.tailleLigne=tailleLigne
         self.tailleColonne=tailleColonne
-        
+        self.lignes=[[]]
+        self.colonnes=[[]]
         for i in range(tailleLigne):
             for j in range(tailleColonne):
                 self.lignes[i].append(Case(bool(randint(0,1))))
@@ -83,7 +88,7 @@ class Grille:
             self.colonnes.append([])
         self.colonnes=self.colonnes[:-1]
         
-        self.grille={Grille.colonne:self.colonnes,Grille.ligne:self.lignes}
+        self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         
         
         
@@ -126,15 +131,15 @@ class Grille:
             for j in range(self.tailleColonne):
                 try:
                     if self.lignes[i][j]!=grille2.lignes[i][j]:
+                        
                         return False
                 except:
                     return False
 
-                finally:
-                    return True
+                return True
     
     def positionsFinal(self):
-        self._position= {Grille.colonne:self._positions(self.colonnes),Grille.ligne:self._positions(self.lignes)}
+        self._position= {Type.colonne:self._positions(self.colonnes),Type.ligne:self._positions(self.lignes)}
         tempo=[[]]
         for i in range(self.tailleLigne):
           
@@ -167,7 +172,9 @@ class Grille:
         liste=liste[index]
         tempo=len(liste)
         i=0
+        
         while liste[i]==False:
+            print(i)
             tempo-=1
             i+=1
         i=1
@@ -227,7 +234,7 @@ class Grille:
             for i in liste:
                 if i.getValeur() == None:
                     i.transformeFaux() 
-        
+        """
         elif len(indexs)==1 and len(self._positionParLigne(liste))>1:
             
             print("oui")
@@ -249,10 +256,15 @@ class Grille:
                     liste[i].transformeVrai()
                     i+=1
                     print(i)
-            
+            """
 
             
     def afficher(self):
         for i in self.lignes:
-            print(i)    
+            print(i)  
+            
+    def resoud(self):
+        for i in range(len(self.lignes)):
+            self.remplis(Type.ligne,i)
+            self.remplis(Type.colonne,i)  
 
