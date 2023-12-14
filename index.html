@@ -7,7 +7,7 @@
 		<script src="https://brython.info/brython.js"></script>
 		<script src="https://brython.info/brython_stdlib.js"></script>
 	</head>
-	<body>
+	<body onload="brython()">
 		<h1>Nonogramm</h1>
 		<div>
 			<p>methode de creation de la grille</p>
@@ -20,20 +20,34 @@
 			<p id="prevention" style="visibility: hidden;" >attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
 			<input type="number" name="rentrez la taille de la grille" id="taille" style="visibility: hidden;">
 		</div>
+		<script>
+
+			let btnAleatoire=document.getElementById("aleatoire")
+			let btnImport=document.getElementById("importer")
+			
+
+			function montreZone(){
+
+				document.getElementById("prevention").style="visible"
+				document.getElementById("taille").style.visibility="visible"
+				
+			}
+
+		</script>
+
+
+		<script type="text/python">
+
+			from browser import document
+			def test(event):
+				print("hello world")
+			aleatoire=document["aleatoire"]
+			aleatoire.bind("click",test)
+
+			
+
+		</script>
+
 	</body>
 </html>
 
-<script>
-
-	let btnAleatoire=document.getElementById("aleatoire")
-	let btnImport=document.getElementById("importer")
-	
-
-	function montreZone(){
-
-		document.getElementById("prevention").style="visible"
-		document.getElementById("taille").style.visibility="visible"
-		
-	}
-
-</script>
