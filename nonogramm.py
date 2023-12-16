@@ -1,4 +1,6 @@
 from random import randint
+#from pip import image
+
 class Type:
     colonne="colonne"
     ligne="ligne"
@@ -87,8 +89,10 @@ class Grille:
         self.colonnes.pop()
         
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
-        
-        
+    
+    
+    def creerGrilleParImage(self,img):
+        return
         
         
         
@@ -251,9 +255,34 @@ class Grille:
                 while liste[i].getValeur()==None:
                     liste[i].transformeVrai()
                     i+=1
-        elif True :
-            pass        
-           
+        elif len(indexs)==1:
+            tempo=0
+            for i in range(len(liste)):
+                tempo=i
+                if liste[i].getValeur()==True:
+                    break
+            for j in range(tempo+indexs[0],len(liste)):
+                liste[j].transformeFaux()
+            
+            
+            for k in range(len(liste)-1,-1,-1):
+                
+                tempo=k
+                if liste[k].getValeur()==True:
+                    break
+            for l in range(tempo-indexs[0],-1,-1):
+                liste[l].transformeFaux()
+            
+            while len(self._positionParLigne(liste))>1:
+                tempo=0
+                while liste[tempo]!=True:
+                    tempo+=1
+                while liste[tempo]==True:
+                    tempo+=1
+                while liste[tempo]!=True:
+                    liste.tempo[tempo].transformeVrai()
+                    tempo+=1
+                    
 
             
     def afficher(self):

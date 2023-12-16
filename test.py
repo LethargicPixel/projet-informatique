@@ -1,5 +1,4 @@
 from os import system
-from time import sleep
 from time import perf_counter
 from nonogramm import Grille, Type
 
@@ -7,20 +6,21 @@ aResoudre=Grille()
 resolu=Grille()
 
 
-for a in range(10,11):
-    system('cls')
-    print(a)
-    aResoudre.creerGrilleHasard(a,a)
-    resolu.lignes=aResoudre.copie()
-    aResoudre.positionsFinal()
+a=10
+system('cls')
+print(a)
+aResoudre.creerGrilleHasard(a,a)
+resolu.lignes=aResoudre.copie()
+aResoudre.positionsFinal()
 
-    temps=perf_counter()
-    print(aResoudre.getPosition())
+temps=perf_counter()
+print(aResoudre.getPosition())
+for j in range(5):
     for i in range(len(aResoudre.lignes)):
-    
+
         aResoudre.remplis(Type.ligne,i)
         aResoudre.remplis(Type.colonne,i)
-    
+
 
 
 
@@ -40,4 +40,3 @@ for a in range(10,11):
     aResoudre.afficher()
     print(round(perf_counter()-temps,2))  
     print(aResoudre.grilleEgal(resolu))
-    
