@@ -11,20 +11,20 @@
 		<h1>Nonogramm</h1>
 		<div>
 			<p>methode de creation de la grille</p>
-		</div>
-		<div>
-			<input type="button" value="aleatoire" id="btnAleatoire" onclick="montreZone()">
-			<input type="button" value="importer" id="btnImporter">
+			<input class="btn" type="button" value="aleatoire" id="btnAleatoire" onclick="montreZone()">
+			<input class="btn" type="button" value="importer" id="btnImporter">
 		</div>
 		<div id="aleatoire" style="visibility: hidden;" >
-			<p>attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
+			<p id="message">attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
 			<input type="number" name="rentrez la taille de la grille" id="entreeTaille" onkeydown="construitGrille(event)">
-			<input type="button" id="btnValider" value="Validez" onclick="construitGrille()">
+			<input class="btn" type="button" id="btnValider" value="Validez" onclick="construitGrille()">
 		</div>
 		<table id="grille" cellspacing="0px" >
 
 		</table>
-
+		<div>
+			<input type="button" id="montreIndex" class="btn" value="creer les indices" style="visibility: hidden;" >
+		</div>
 
 		<script>
 
@@ -48,13 +48,14 @@
 						grille.deleteRow(0)
 					}
 					if (entreeTaille.value>0){
+						document.getElementById("montreIndex").style="visible"
 						for (i=0;i<=entreeTaille.value;i++){
 							var ligne=grille.insertRow()
 
 							for (j=0;j<=entreeTaille.value;j++){
 								var cellule=ligne.insertCell()
-								cellule.style.padding=Math.floor((window.innerWidth/5)/entreeTaille.value)+"px"
-								cellule.id=i+''+j
+								cellule.style.padding=Math.floor(Math.floor(window.innerHeight/5)/entreeTaille.value)+"px"
+								cellule.id=i+','+j
 							}
 						}
 					}
@@ -65,13 +66,17 @@
 
 		<script type="text/python">
 			from browser import document
-			from nonogramm import Grille
+			from browser import html
+			from nonogramm import Grille, Type
 
 			btnValider=document["btnValider"]
 			entreeTaille=document["entreeTaille"]
 			tableau=document["grille"]
 			aResoudre=Grille()
 			resolu=Grille()
+			idPremiereLigne=[]
+			idPremiereColonne=[]
+			montreIndex=document["montreIndex"]
 
 			def aleatoire(ev):
 				if ev.type=="click":
@@ -80,18 +85,45 @@
 					taille=document["entreeTaille"].value
 					if taille=='':taille=0
 					taille=int(taille)
-					print(taille)
 
 					if taille>0:
+
+						for i in range(taille+1):
+							idPremiereLigne.append(f"0,{i}")
+							idPremiereColonne.append(f"{i},0")
+
 						aResoudre.creerGrilleHasard(taille,taille)
 						resolu.lignes=aResoudre.copie()
 						indexs=aResoudre.positionsFinal()
+			
+			def afficheIndexLigne(ev):
+				index=aResoudre.getPosition()[Type.ligne]
+				
+				for i in idPremiereLigne[1:]:
+					celluleARemplir=document[i]
+					valeur=i.split(",")
+					chaine=index[int(valeur[1])-1]
+					chaine=html.P("<br>".join(map(str,chaine)))
+					document[i] <= chaine
+
+			def afficheIndexColonne(ev):
+				index=aResoudre.getPosition()[Type.colonne]
+				
+				for i in idPremiereColonne[1:]:
+					celluleARemplir=document[i]
+					valeur=i.split(",")
+					chaine=index[int(valeur[0])-1]
+					chaine=html.P(" ".join(map(str,chaine)))
+					document[i] <= chaine			
+				
 					
+
 
 			btnValider.bind("click",aleatoire)
 			entreeTaille.bind("keypress",aleatoire)
-			
 
+			montreIndex.bind("click",afficheIndexLigne)
+			montreIndex.bind("click",afficheIndexColonne)
 			
 
 		</script>

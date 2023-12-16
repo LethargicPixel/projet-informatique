@@ -78,13 +78,13 @@ class Grille:
             self.lignes.append([])
             for j in range(tailleColonne):
                 self.lignes[i].append(Case(bool(randint(0,1))))
- 
+        self.lignes.pop()
         
         for i in range(tailleColonne):
             self.colonnes.append([])
             for j in range(tailleLigne):
                 self.colonnes[i].append(self.lignes[j][i])
-            
+        self.colonnes.pop()
         
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         
@@ -115,13 +115,15 @@ class Grille:
                 compte=0
         result.append(compte)
         
-        for i in result:
-            while True:
-                try:
-                    result[i].remove(0)
-                except:
-                    break
         
+        while True:
+            try:
+                result.remove(0)
+            except:
+                break
+        if not result:
+            result.append(0)
+            
         return result
     
     def grilleEgal(self,grille2):
@@ -147,6 +149,7 @@ class Grille:
             tempo.append([])
         tempo=tempo[:-1]
         
+               
 
         for i in self.lignes:
             for y in i:
@@ -165,18 +168,18 @@ class Grille:
         return tempo
     
     def _comptePlaceLibre(self,type:str,index:int):
-
+       
         liste=self.grille[type]
+        
         liste=liste[index]
         tempo=len(liste)
         i=0
-        
-        while liste[i]==False:
-            print(i)
+        while liste[i]==False and tempo!=0:
             tempo-=1
             i+=1
+            
         i=1
-        while liste[-i]==False:
+        while liste[-i]==False and tempo!=0:
             tempo-=1
             i+=1
         return tempo
@@ -232,29 +235,25 @@ class Grille:
             for i in liste:
                 if i.getValeur() == None:
                     i.transformeFaux() 
-        """
+       
         elif len(indexs)==1 and len(self._positionParLigne(liste))>1:
-            
-            print("oui")
-            print(type)
-            print(indexs)
-            print(self._positionParLigne(liste))
-            
-            
+           
+        
             while (len(self._positionParLigne(liste))!=1):
                 i=0 
                 
                 while liste[i].getValeur()!=True:
                     i+=1
-                    print(i)
+                   
                 while liste[i].getValeur()==True:
                     i+=1
-                    print(i)
+                    
                 while liste[i].getValeur()==None:
                     liste[i].transformeVrai()
                     i+=1
-                    print(i)
-            """
+        elif True :
+            pass        
+           
 
             
     def afficher(self):
