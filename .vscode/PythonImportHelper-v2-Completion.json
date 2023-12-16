@@ -70,7 +70,7 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self._position={}\n        self.lignes=[[]]\n        self.colonnes=[[]]\n        self.grille={}\n    def copie(self):\n        tempo=[[]]",
+        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes=[[]]\n        self.colonnes=[[]]\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self._position={}\n        self.grille={}\n    def copie(self):\n        tempo=[[]]",
         "detail": "nonogramm",
         "documentation": {}
     }

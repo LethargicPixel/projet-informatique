@@ -50,17 +50,14 @@ class Case:
         
         
 class Grille:
-    
-
-    
+        
     def __init__(self) -> None:
         
-        
+        self.lignes=[[]]
+        self.colonnes=[[]]
         self.tailleLigne=0
         self.tailleColonne=0
         self._position={}
-        self.lignes=[[]]
-        self.colonnes=[[]]
         self.grille={}
 
     def copie(self):
@@ -76,17 +73,18 @@ class Grille:
         self.tailleColonne=tailleColonne
         self.lignes=[[]]
         self.colonnes=[[]]
+        
         for i in range(tailleLigne):
+            self.lignes.append([])
             for j in range(tailleColonne):
                 self.lignes[i].append(Case(bool(randint(0,1))))
-            self.lignes.append([])
-        self.lignes=self.lignes[:-1]
+ 
         
         for i in range(tailleColonne):
+            self.colonnes.append([])
             for j in range(tailleLigne):
                 self.colonnes[i].append(self.lignes[j][i])
-            self.colonnes.append([])
-        self.colonnes=self.colonnes[:-1]
+            
         
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         

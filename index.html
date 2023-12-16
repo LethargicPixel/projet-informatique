@@ -13,36 +13,84 @@
 			<p>methode de creation de la grille</p>
 		</div>
 		<div>
-			<input type="button" value="aleatoire" id="aleatoire" onclick="montreZone()">
-			<input type="button" value="importer" id="importer">
+			<input type="button" value="aleatoire" id="btnAleatoire" onclick="montreZone()">
+			<input type="button" value="importer" id="btnImporter">
 		</div>
-		<div>
-			<p id="prevention" style="visibility: hidden;" >attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
-			<input type="number" name="rentrez la taille de la grille" id="taille" style="visibility: hidden;">
+		<div id="aleatoire" style="visibility: hidden;" >
+			<p>attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
+			<input type="number" name="rentrez la taille de la grille" id="entreeTaille" onkeydown="construitGrille(event)">
+			<input type="button" id="btnValider" value="Validez" onclick="construitGrille()">
 		</div>
+		<table id="grille" cellspacing="0px" >
+
+		</table>
+
+
 		<script>
 
-			let btnAleatoire=document.getElementById("aleatoire")
-			let btnImport=document.getElementById("importer")
-			
+			let btnAleatoire=document.getElementById("btnAleatoire")
+			let btnImport=document.getElementById("btnImporter")
+			let entreeTaille=document.getElementById("entreeTaille")
+
+			let grille=document.getElementById("grille")
+			grille.border=1
 
 			function montreZone(){
 
-				document.getElementById("prevention").style="visible"
-				document.getElementById("taille").style.visibility="visible"
-				
+				document.getElementById("aleatoire").style.visibility="visible"
 			}
 
+
+
+			function construitGrille(event){
+				if (!event || event.key==="Enter"){
+					while (grille.rows.length > 0) {
+						grille.deleteRow(0)
+					}
+					if (entreeTaille.value>0){
+						for (i=0;i<=entreeTaille.value;i++){
+							var ligne=grille.insertRow()
+
+							for (j=0;j<=entreeTaille.value;j++){
+								var cellule=ligne.insertCell()
+								cellule.style.padding=Math.floor((window.innerWidth/5)/entreeTaille.value)+"px"
+								cellule.id=i+''+j
+							}
+						}
+					}
+				}
+			}
 		</script>
 
 
 		<script type="text/python">
-
 			from browser import document
-			def test(event):
-				print("hello world")
-			aleatoire=document["aleatoire"]
-			aleatoire.bind("click",test)
+			from nonogramm import Grille
+
+			btnValider=document["btnValider"]
+			entreeTaille=document["entreeTaille"]
+			tableau=document["grille"]
+			aResoudre=Grille()
+			resolu=Grille()
+
+			def aleatoire(ev):
+				if ev.type=="click":
+					ev.key="Enter"
+				if ev.key=="Enter" or ev.type=="click":
+					taille=document["entreeTaille"].value
+					if taille=='':taille=0
+					taille=int(taille)
+					print(taille)
+
+					if taille>0:
+						aResoudre.creerGrilleHasard(taille,taille)
+						resolu.lignes=aResoudre.copie()
+						indexs=aResoudre.positionsFinal()
+					
+
+			btnValider.bind("click",aleatoire)
+			entreeTaille.bind("keypress",aleatoire)
+			
 
 			
 
