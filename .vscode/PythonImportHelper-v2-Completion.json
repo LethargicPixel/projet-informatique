@@ -1,5 +1,13 @@
 [
     {
+        "label": "reverse",
+        "importPath": "audioop",
+        "description": "audioop",
+        "isExtraImport": true,
+        "detail": "audioop",
+        "documentation": {}
+    },
+    {
         "label": "randint",
         "importPath": "random",
         "description": "random",
@@ -16,27 +24,19 @@
         "documentation": {}
     },
     {
+        "label": "search",
+        "importPath": "re",
+        "description": "re",
+        "isExtraImport": true,
+        "detail": "re",
+        "documentation": {}
+    },
+    {
         "label": "perf_counter",
         "importPath": "time",
         "description": "time",
         "isExtraImport": true,
         "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "Grille",
-        "importPath": "nonogramm",
-        "description": "nonogramm",
-        "isExtraImport": true,
-        "detail": "nonogramm",
-        "documentation": {}
-    },
-    {
-        "label": "Type",
-        "importPath": "nonogramm",
-        "description": "nonogramm",
-        "isExtraImport": true,
-        "detail": "nonogramm",
         "documentation": {}
     },
     {
