@@ -14,13 +14,16 @@
 		<div>
 			<p>methode de creation de la grille</p>
 			<input class="btn" type="button" value="aleatoire" id="btnAleatoire" onclick="montreZone()">
-			<input class="btn" type="button" value="index" id="btnindex">
+			<input class="btn" type="button" value="index" id="btnindex" onclick="montreZone2()">
 		</div>
+		
 		<div id="aleatoire" style="visibility: hidden;" >
-			<p id="message">attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
+			<p id="message">attention, toutes valeures depassant 10 peu faire ralentir le proggramme</p>
 			<input type="number" name="rentrez la taille de la grille" id="entreeTaille" onkeydown="construitGrille(event)">
 			<input class="btn" type="button" id="btnValider" value="Validez" onclick="construitGrille()">
 		</div>
+
+
 		<table id="grille" cellspacing="0px" >
 
 		</table>
@@ -51,7 +54,11 @@
 
 				document.getElementById("aleatoire").style.visibility="visible"
 			}
+			function montreZone2(){
 
+				document.getElementById("aleatoire").style.visibility="visible"
+				
+			}
 
 
 			function construitGrille(event){
@@ -67,7 +74,7 @@
 
 							for (j=0;j<=entreeTaille.value;j++){
 								var cellule=ligne.insertCell()
-								
+								cellule.style.padding="10px"
 								cellule.id=i+','+j
 							}
 						}

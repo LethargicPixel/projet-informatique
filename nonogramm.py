@@ -53,10 +53,7 @@ class Case:
         
     def vider(self):
         self._valeur=None
-        
-        
-        
-        
+             
         
 class Grille:
         
@@ -98,7 +95,6 @@ class Grille:
         
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         self._positionsFinal()
-    
     
     def creerGrilleParIndex(self,*positions):
         sequence1=positions[0]
@@ -147,9 +143,7 @@ class Grille:
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         self._positionModifiable=copy.deepcopy(self._position)
   
-        return True
-        
-        
+        return True    
         
     def _positions(self,liste):
         tempo=liste[:]
@@ -158,7 +152,6 @@ class Grille:
             result[i]=self._positionParLigne(tempo[i])
 
         return result
-    
     
     def _positionParLigne(self,liste):
         compte=0
@@ -197,7 +190,7 @@ class Grille:
 
                 return True
             
-    def compteTrou(self,liste):
+    def _compteTrou(self,liste):
         result=[]
         compteur=0
         for i in liste:
@@ -313,7 +306,6 @@ class Grille:
         except:
             return result,compteur
     
-    
     def _verifLimiteFin(self,liste,indexs,compte=False):
         result=False
         indexs=copy.deepcopy(indexs)
@@ -342,13 +334,7 @@ class Grille:
             return result,-(compteur+1),indexs
         except:
             return result,-(compteur+1)
-    
-          
-          
-          
-          
-          
-           
+      
     def remplis(self,type,indexs):
        
         coordonnee=indexs
@@ -361,7 +347,7 @@ class Grille:
         nbARemplir=self._compteTotalCase(type,coordonnee)
         
         indexs=self._position[type][coordonnee]
-        trous=self.compteTrou(liste)
+        trous=self._compteTrou(liste)
         
         
         limiteDebut=self._verifLimiteDebut(liste,indexs)
@@ -383,9 +369,6 @@ class Grille:
         compteur=0
         
         
-
-
-
         if (indexsModif[0]==nbLibres[0] and indexsModif[0]==len(liste)):
             for i in liste:
                 i.transformeVrai()
@@ -490,7 +473,7 @@ class Grille:
             i=0
             try:
                 while i+max(trous)<len(liste):
-                    trous=self.compteTrou(liste)
+                    trous=self._compteTrou(liste)
                     pasRemplis=liste[i:i+max(trous)+1].index(Case())
                     if liste[i+max(trous)]!=None:
                         liste[pasRemplis].transformeFaux()
@@ -512,7 +495,7 @@ class Grille:
                  
 if __name__=="__main__":
     grille=Grille()
-    
+    #grille.creerGrilleParIndex([[2,1],[1,1],[1,1],[1,1]],[[4],[1],[1],[3]])
 
     grille.creerGrilleHasard(10,10)
     print(grille.getPosition())
