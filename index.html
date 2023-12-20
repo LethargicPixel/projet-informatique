@@ -67,7 +67,7 @@
 
 							for (j=0;j<=entreeTaille.value;j++){
 								var cellule=ligne.insertCell()
-								cellule.style.padding=Math.floor(Math.floor(window.innerHeight/5)/entreeTaille.value)+"px"
+								
 								cellule.id=i+','+j
 							}
 						}
@@ -79,9 +79,28 @@
 		</script>
 
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		<script type="text/python">
 			from browser import document
 			from browser import html
+			from browser import window
 			from nonogramm import Grille, Type
 
 			btnValider=document["btnValider"]
@@ -111,8 +130,7 @@
 
 						aResoudre.creerGrilleHasard(taille,taille)
 						resolu.lignes=aResoudre.copie()
-						indexs=aResoudre.positionsFinal()
-						aResoudre.resoudre()
+						aResoudre.resoud()
 
 			def afficheIndexLigne(ev):
 				index=aResoudre.getPosition()[Type.ligne]
@@ -140,6 +158,30 @@
 				btnJoueur.style.visibility="visible"
 				document["msgApresIndice"].style.visibility="visible"
 				
+			def afficher(ev):
+				taille=int(document["entreeTaille"].value)
+				for j in range(1,taille+1):
+					for i in range(1,taille+1):
+						caseARemplir=document[f"{j},{i}"]
+						if aResoudre.lignes[i-1][j-1].getValeur()==True:
+							aAfficher="images/noir.jpg"
+						elif aResoudre.lignes[i-1][j-1].getValeur()==False:
+							aAfficher="images/croix.png"
+						else:
+							aAfficher="images/blanc.png"
+						image=html.IMG()
+						image.src=aAfficher
+
+						
+						tailleImg=f"{round(window.innerWidth/3/taille)}px"
+
+
+						image.width=int(tailleImg[0:tailleImg.index("p")])
+						image.height=int(tailleImg[0:tailleImg.index("p")])
+						caseARemplir.style.padding="0px"
+						caseARemplir <= image
+
+
 
 			btnValider.bind("click",aleatoire)
 			entreeTaille.bind("keypress",aleatoire)
@@ -148,6 +190,7 @@
 			montreIndex.bind("click",afficheIndexColonne)
 			montreIndex.bind("click",boutons)
 
+			btnOrdi.bind("click",afficher)
 		</script>
 
 	</body>
