@@ -14,7 +14,7 @@
 		<div>
 			<p>methode de creation de la grille</p>
 			<input class="btn" type="button" value="aleatoire" id="btnAleatoire" onclick="montreZone()">
-			<input class="btn" type="button" value="index" id="btnindex" onclick="montreZone2()">
+			<input class="btn" type="button" value="index" id="btnindex" >
 		</div>
 		
 		<div id="aleatoire" style="visibility: hidden;" >
@@ -37,9 +37,10 @@
 		</div>
 
 		<div>			
-				<input type="button" value="ordinateur" class="btn" id="ordi" style="visibility: hidden;">
-				<input type="button" value="joueur" class="btn" id="joueur" style="visibility: hidden;" onclick="convertisImageEnListe">
-			</div>
+			<input type="button" value="ordinateur" class="btn" id="ordi" style="visibility: hidden;">
+			<!--<input type="button" value="joueur" class="btn" id="joueur" style="visibility: hidden;" >
+			-->
+		</div>
 
 		<script>
 
@@ -54,13 +55,6 @@
 
 				document.getElementById("aleatoire").style.visibility="visible"
 			}
-			function montreZone2(){
-
-				document.getElementById("aleatoire").style.visibility="visible"
-				
-			}
-
-
 			function construitGrille(event){
 				if (!event || event.key==="Enter"){
 					while (grille.rows.length > 0) {
