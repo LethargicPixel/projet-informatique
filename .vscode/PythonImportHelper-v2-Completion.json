@@ -1,10 +1,10 @@
 [
     {
-        "label": "reverse",
-        "importPath": "audioop",
-        "description": "audioop",
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
         "isExtraImport": true,
-        "detail": "audioop",
+        "detail": "PIL",
         "documentation": {}
     },
     {
@@ -16,35 +16,11 @@
         "documentation": {}
     },
     {
-        "label": "system",
-        "importPath": "os",
-        "description": "os",
-        "isExtraImport": true,
-        "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "search",
-        "importPath": "re",
-        "description": "re",
-        "isExtraImport": true,
-        "detail": "re",
-        "documentation": {}
-    },
-    {
-        "label": "perf_counter",
-        "importPath": "time",
-        "description": "time",
-        "isExtraImport": true,
-        "detail": "time",
-        "documentation": {}
-    },
-    {
         "label": "Type",
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Type:\n    colonne=\"colonne\"\n    ligne=\"ligne\"\nclass Case:\n    vrai=\"|\"\n    faux=\"O\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:",
+        "peekOfCode": "class Type:\n    colonne=\"colonne\"\n    ligne=\"ligne\"\nclass Case:\n    vrai=\"V\"\n    faux=\"F\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:",
         "detail": "nonogramm",
         "documentation": {}
     },
@@ -53,7 +29,7 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Case:\n    vrai=\"|\"\n    faux=\"O\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:\n            case True :\n                return Case.vrai\n            case False:",
+        "peekOfCode": "class Case:\n    vrai=\"V\"\n    faux=\"F\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:\n            case True :\n                return Case.vrai\n            case False:",
         "detail": "nonogramm",
         "documentation": {}
     },

@@ -23,15 +23,25 @@
 
 		</table>
 		<div>
-			<input type="button" id="montreIndex" class="btn" value="creer les indices" style="visibility: hidden;" >
+			<input type="button" id="montreIndex" class="btn" value="creer les indices" style="visibility: hidden;">
+
 		</div>
+		<div style="display: flex;" style="flex-direction: column;">
+			<p id="msgApresIndice" style="visibility: hidden;">par qui voulez vous que le nonogramm soit remplis ?</p>
+			
+		</div>
+
+		<div>			
+				<input type="button" value="ordinateur" class="btn" id="ordi" style="visibility: hidden;">
+				<input type="button" value="joueur" class="btn" id="joueur" style="visibility: hidden;" onclick="convertisImageEnListe">
+			</div>
 
 		<script>
 
 			let btnAleatoire=document.getElementById("btnAleatoire")
 			let btnImport=document.getElementById("btnImporter")
 			let entreeTaille=document.getElementById("entreeTaille")
-
+			let btnIndice=document.getElementById("montreIndex")
 			let grille=document.getElementById("grille")
 			grille.border=1
 
@@ -47,8 +57,9 @@
 					while (grille.rows.length > 0) {
 						grille.deleteRow(0)
 					}
+					btnIndice.style.visibility="hidden"
 					if (entreeTaille.value>0){
-						document.getElementById("montreIndex").style="visible"
+						btnIndice.style="visible"
 						for (i=0;i<=entreeTaille.value;i++){
 							var ligne=grille.insertRow()
 
@@ -60,6 +71,10 @@
 						}
 					}
 				}
+			}
+
+			function convertisImageEnListe(){
+				__BRYTHON__.run_script("a="+JSON.stringify([1,2,3]))
 			}
 		</script>
 
@@ -77,6 +92,8 @@
 			idPremiereLigne=[]
 			idPremiereColonne=[]
 			montreIndex=document["montreIndex"]
+			btnOrdi=document["ordi"]
+			btnJoueur=document["joueur"]
 
 			def aleatoire(ev):
 				if ev.type=="click":
@@ -95,7 +112,8 @@
 						aResoudre.creerGrilleHasard(taille,taille)
 						resolu.lignes=aResoudre.copie()
 						indexs=aResoudre.positionsFinal()
-			
+						aResoudre.resoudre()
+
 			def afficheIndexLigne(ev):
 				index=aResoudre.getPosition()[Type.ligne]
 				
@@ -115,16 +133,20 @@
 					chaine=index[int(valeur[0])-1]
 					chaine=html.P(" ".join(map(str,chaine)))
 					document[i] <= chaine			
-				montreIndex.style.visibility="hidden"
-					
-
+				
+			def boutons(ev):
+				montreIndex.style.visibility="hidden"		
+				btnOrdi.style.visibility="visible"
+				btnJoueur.style.visibility="visible"
+				document["msgApresIndice"].style.visibility="visible"
+				print(a)
 
 			btnValider.bind("click",aleatoire)
 			entreeTaille.bind("keypress",aleatoire)
 
 			montreIndex.bind("click",afficheIndexLigne)
 			montreIndex.bind("click",afficheIndexColonne)
-			
+			montreIndex.bind("click",boutons)
 
 		</script>
 
