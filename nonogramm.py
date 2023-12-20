@@ -1,8 +1,6 @@
-from PIL import Image
+import copy
 from random import randint
 
-
-#from pip import image
 
 class Type:
     colonne="colonne"
@@ -68,8 +66,8 @@ class Grille:
         self.colonnes=[[]]
         self.tailleLigne=0
         self.tailleColonne=0
-        self._position={}
-        self._positionModifiable={}
+        self._position = {Type.colonne: {}, Type.ligne: {}}
+        self._positionModifiable = {Type.colonne: {}, Type.ligne: {}}
         self.grille={}
 
     def copie(self):
@@ -99,19 +97,57 @@ class Grille:
         self.colonnes.pop()
         
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
+        self._positionsFinal()
     
     
-    def creerGrilleParImage(self,img,resolution):
-        img=Image(img)
-        largeurCarre=img.size[0]//resolution
-        hauteurCarre=img.size[1]//resolution
-        for i in range(resolution):
-            for j in range(resolution):
-                carre=img.crop(largeurCarre*i,hauteurCarre*i,largeurCarre*(i+1),hauteurCarre*(i+1))
-                for k in range(carre.size[0]):
-                    for l in range(carre.size[1]):
-                        carre.getpixel(k,l)
-            
+    def creerGrilleParIndex(self,*positions):
+        sequence1=positions[0]
+        sequence2=positions[1]
+        somme1=0
+        somme2=0
+        self.lignes=[[]]
+        self.colonnes=[[]]
+        self.tailleColonne=len(sequence1)
+        self.tailleLigne=len(sequence2)
+        
+        for i in sequence1:
+            for k in i:
+                somme1+=k
+               
+        for i in sequence2:
+            for k in i:
+                somme2+=k
+                      
+        if somme1!=somme2:
+            return False
+        
+        self._position[Type.colonne]={}
+        for i in range(len(sequence1)):
+            self._position[Type.colonne][i]=sequence1[i]    
+                
+        self._position[Type.ligne]={}
+        for i in range(len(sequence2)):
+            self._position[Type.ligne][i]=sequence2[i]
+        
+
+
+        
+        for i in range(self.tailleLigne):
+            self.lignes.append([])
+            for j in range(self.tailleColonne):
+                self.lignes[i].append(Case())
+        self.lignes.pop()
+        
+        for i in range(self.tailleColonne):
+            self.colonnes.append([])
+            for j in range(self.tailleLigne):
+                self.colonnes[i].append(self.lignes[j][i])
+        self.colonnes.pop()
+        
+        self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
+        self._positionModifiable=copy.deepcopy(self._position)
+  
+        return True
         
         
         
@@ -181,10 +217,11 @@ class Grille:
             result=[len(liste)]
         return result
         
-    def positionsFinal(self):
+    def _positionsFinal(self):
         
-        self._position= {Type.colonne:self._positions(self.colonnes),Type.ligne:self._positions(self.lignes)}
-        self._positionModifiable=dict(self._position) 
+        self._position[Type.colonne] = self._positions(self.colonnes)
+        self._position[Type.ligne] = self._positions(self.lignes)
+        self._positionModifiable=copy.deepcopy(self._position) 
         tempo=[[]]
         
         for i in range(self.tailleLigne):
@@ -214,7 +251,6 @@ class Grille:
         return tempo
     
     def _comptePlaceLibre(self,type:str,index:int):
-       
         liste=self.grille[type][index]
         indexs=self._positionModifiable[type][index]
         place=[]
@@ -232,14 +268,14 @@ class Grille:
             i-=1
             tempo-=1
         place.append(i)
-        i=-fin[1]
-        while liste[-i].getValeur()!=None and i<(len(liste)-2):
-            i+=1
+        i=fin[1]
+        while liste[i].getValeur()!=None and i<(len(liste)-2):
+            i-=1
             tempo-=1
             
         while liste[-i-1].getValeur()==True and i>1 and i<(len(liste)-2):
             i+=1
-        place.append(-i)
+        place.append(i)
         if tempo<0:
             tempo=0
         return tempo,place
@@ -252,7 +288,7 @@ class Grille:
     
     def _verifLimiteDebut(self,liste,indexs,compte=False):
         result=False
-
+        indexs=copy.deepcopy(indexs)
         try:
             i=liste.index(Case())
             tempo=liste[0:i]
@@ -271,6 +307,8 @@ class Grille:
                 for i in aEnlever:
                     
                     indexs.remove(i)
+                if not indexs:
+                    indexs=[0]
             return result,compteur,indexs
         except:
             return result,compteur
@@ -278,6 +316,7 @@ class Grille:
     
     def _verifLimiteFin(self,liste,indexs,compte=False):
         result=False
+        indexs=copy.deepcopy(indexs)
         inverser=liste[::-1]
         try:
             i=inverser.index(Case())
@@ -298,9 +337,11 @@ class Grille:
                 for i in aEnlever:
                     indexs.remove(i)
                 indexs=indexs[::-1]
-            return result,-compteur,indexs
+                if not indexs:
+                    indexs=[0]
+            return result,-(compteur+1),indexs
         except:
-            return result,-compteur
+            return result,-(compteur+1)
     
           
           
@@ -309,9 +350,10 @@ class Grille:
           
            
     def remplis(self,type,indexs):
+       
         coordonnee=indexs
         liste=self.grille[type][coordonnee]
-        
+
         if self._verifLigneRemplis(liste):
             return
         
@@ -342,21 +384,17 @@ class Grille:
         
         
 
-        if (indexsModif==[nbLibres[0]] or indexsModif==len(liste)):
+
+
+        if (indexsModif[0]==nbLibres[0] and indexsModif[0]==len(liste)):
             for i in liste:
                 i.transformeVrai()
+        
+        elif indexsModif[0]==0:
+            for i in liste:
+                i.transformeFaux() 
                 
-        elif max(trous)<min(indexsModif) and not self._verifLigneRemplis(liste):
-            i=0
-            try:
-                while i+max(trous)<len(liste):
-                    trous=self.compteTrou(liste)
-                    pasRemplis=liste[i:i+max(trous)+1].index(Case())
-                    if liste[i+max(trous)]!=None:
-                        liste[pasRemplis].transformeFaux()
-                    i+=1
-            except:
-                pass
+        
         
         elif limiteDebut[0]:
             compteur=limiteDebut[1]
@@ -368,13 +406,13 @@ class Grille:
                 liste[compteur].transformeFaux()
         
         elif limiteFin[0]:
-            compteur=-limiteFin[1]+1
+            compteur=limiteFin[1]
             for i in range(indexsModif[-1]):
                 
-                liste[-compteur].transformeVrai()
-                compteur+=1
-            if -compteur<len(liste):
-                liste[-(compteur)].transformeFaux()
+                liste[compteur].transformeVrai()
+                compteur-=1
+            if -(compteur+1)<len(liste):
+                liste[compteur].transformeFaux()
                          
         elif nbLibres[0]==nbARemplir and len(indexs)>1  and not self._verifLigneRemplis(liste):
             for i in indexsModif:
@@ -404,8 +442,7 @@ class Grille:
                 
         elif indexs==self._positionParLigne(liste) and not self._verifLigneRemplis(liste):
             for i in liste:
-                if i.getValeur() == None:
-                    i.transformeFaux() 
+                i.transformeFaux() 
        
         elif len(indexs)==1 and len(self._positionParLigne(liste))>1 and not self._verifLigneRemplis(liste):
            
@@ -449,12 +486,35 @@ class Grille:
                 while liste[tempo]!=True:
                     liste.tempo[tempo].transformeVrai()
                     tempo+=1          
-                         
+        elif max(trous)<min(indexsModif) and not self._verifLigneRemplis(liste):
+            i=0
+            try:
+                while i+max(trous)<len(liste):
+                    trous=self.compteTrou(liste)
+                    pasRemplis=liste[i:i+max(trous)+1].index(Case())
+                    if liste[i+max(trous)]!=None:
+                        liste[pasRemplis].transformeFaux()
+                    i+=1
+            except:
+                pass
+                             
     def afficher(self):
         for i in self.lignes:
             print(i)  
             
     def resoud(self):
-        for i in range(len(self.lignes)):
-            self.remplis(Type.ligne,i)
-            self.remplis(Type.colonne,i)  
+        for k in range(self.tailleLigne-1):
+            
+            for j in range(self.tailleColonne):
+                for i in range(self.tailleLigne):
+                    self.remplis(Type.ligne,i)
+                    self.remplis(Type.colonne,i)
+                 
+if __name__=="__main__":
+    grille=Grille()
+    
+
+    grille.creerGrilleHasard(10,10)
+    print(grille.getPosition())
+    grille.resoud()
+    grille.afficher()

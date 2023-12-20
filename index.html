@@ -4,15 +4,17 @@
 		<meta charset="utf-8">
 		<title>Nonogramm</title>
 		<link rel="stylesheet" type="text/css" href="./style.css">
-		<script src="https://brython.info/brython.js"></script>
-		<script src="https://brython.info/brython_stdlib.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js">
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/brython@3/brython_stdlib.js">
+		</script>
 	</head>
 	<body onload="brython()">
 		<h1>Nonogramm</h1>
 		<div>
 			<p>methode de creation de la grille</p>
 			<input class="btn" type="button" value="aleatoire" id="btnAleatoire" onclick="montreZone()">
-			<input class="btn" type="button" value="importer" id="btnImporter">
+			<input class="btn" type="button" value="index" id="btnindex">
 		</div>
 		<div id="aleatoire" style="visibility: hidden;" >
 			<p id="message">attention, toutes valeur depassant 100 peu faire ralentir le proggramme</p>
@@ -39,7 +41,7 @@
 		<script>
 
 			let btnAleatoire=document.getElementById("btnAleatoire")
-			let btnImport=document.getElementById("btnImporter")
+			let btnImport=document.getElementById("btnindex")
 			let entreeTaille=document.getElementById("entreeTaille")
 			let btnIndice=document.getElementById("montreIndex")
 			let grille=document.getElementById("grille")
@@ -73,9 +75,7 @@
 				}
 			}
 
-			function convertisImageEnListe(){
-				__BRYTHON__.run_script("a="+JSON.stringify([1,2,3]))
-			}
+
 		</script>
 
 
@@ -139,7 +139,7 @@
 				btnOrdi.style.visibility="visible"
 				btnJoueur.style.visibility="visible"
 				document["msgApresIndice"].style.visibility="visible"
-				print(a)
+				
 
 			btnValider.bind("click",aleatoire)
 			entreeTaille.bind("keypress",aleatoire)
