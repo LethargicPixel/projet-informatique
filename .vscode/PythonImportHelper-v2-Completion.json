@@ -9,6 +9,14 @@
         "documentation": {}
     },
     {
+        "label": "ParameterizedMIMEHeader",
+        "importPath": "email.headerregistry",
+        "description": "email.headerregistry",
+        "isExtraImport": true,
+        "detail": "email.headerregistry",
+        "documentation": {}
+    },
+    {
         "label": "randint",
         "importPath": "random",
         "description": "random",
@@ -17,29 +25,29 @@
         "documentation": {}
     },
     {
-        "label": "Typ",
+        "label": "Type",
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Type :\n    colonne = \"colonne\"\n    ligne = \"ligne\"\nclass Case :\n    vrai = \"V\"\n    faux = \"F\"\n    def __init__( self, valeur = None ) :\n        self._valeur = valeur\n    def __str__( self ) :",
+        "peekOfCode": "class Type:\n    colonne=\"colonne\"\n    ligne=\"ligne\"\nclass Case:\n    vrai=\"■\"\n    faux=\"X\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:",
         "detail": "nonogramm",
         "documentation": {}
     },
     {
-        "label": "Cas",
+        "label": "Case",
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Case :\n    vrai = \"V\"\n    faux = \"F\"\n    def __init__( self, valeur = None ) :\n        self._valeur = valeur\n    def __str__( self ) :\n        match self._valeur :\n            case True  :\n                return Case.vrai\n            case False :",
+        "peekOfCode": "class Case:\n    vrai=\"■\"\n    faux=\"X\"\n    def __init__(self, valeur=None):\n        self._valeur=valeur\n    def __str__(self):\n        match self._valeur:\n            case True :\n                return Case.vrai\n            case False:",
         "detail": "nonogramm",
         "documentation": {}
     },
     {
-        "label": "Grill",
+        "label": "Grille",
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Grille :\n    def __init__( self ) :\n        self.lignes = [ [ ] ]\n        self.colonnes = [ [ ] ]\n        self.tailleLigne = 0\n        self.tailleColonne = 0\n        self._position  =  {Type.colonne : {}, Type.ligne : {}}\n        self._positionModifiable  =  {Type.colonne : {}, Type.ligne : {}}\n        self.grille = {}\n    def copie( self ) :",
+        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes=[[]]\n        self.colonnes=[[]]\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self._position = {Type.colonne: {}, Type.ligne: {}}\n        self._positionModifiable = {Type.colonne: {}, Type.ligne: {}}\n        self.grille={}\n    def copie(self):",
         "detail": "nonogramm",
         "documentation": {}
     }

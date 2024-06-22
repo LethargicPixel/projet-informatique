@@ -110,10 +110,10 @@ class Grille:
         self._positionsFinal()
     
     def creerGrilleParIndex(self,*positions):
-        """creer une grille avec les indexs donné en parametre
+        """creer une grille avec les coordonnee donné en parametre
 
         Args:
-            positions (List[List]): prend en parametre une liste de 2 liste, la premiere est les indexs des ligne et la seconde est les indexs de la colonne
+            positions (List[List]): prend en parametre une liste de 2 liste, la premiere est les coordonnee des ligne et la seconde est les coordonnee de la colonne
         """
         sequence1=positions[0]
         sequence2=positions[1]
@@ -164,13 +164,13 @@ class Grille:
          
         
     def _positions(self,liste):
-        """calcule les indexs pour un cote de la grille
+        """calcule les coordonnee pour un cote de la grille
 
         Args:
             liste (Liste[Liste[Case]]): un sens de la grille
 
         Returns:
-            Liste[Liste[int]]: tous les indexs pour ce sens de la grille
+            Liste[Liste[int]]: tous les coordonnee pour ce sens de la grille
         """
         tempo=liste[:]
         result={}
@@ -180,13 +180,13 @@ class Grille:
         return result
     
     def _positionParLigne(self,liste):
-        """calcule les indexs pour une seul ligne
+        """calcule les coordonnee pour une seul ligne
 
         Args:
             liste (List[Case]): une seul ligne de la grille
 
         Returns:
-            List[int]: les indexs correspondant à la grille passe en parametre
+            List[int]: les coordonnee correspondant à la grille passe en parametre
         """
         compte=0
         result=[]
@@ -222,17 +222,16 @@ class Grille:
         Returns:
             Bool: True si les deux grilles sont les même, False sinon
         """
+        if self.tailleColonne!=grille2.tailleColonne or self.tailleLigne!=grille2.tailleLigne:
+            return False
         
         for i in range(self.tailleLigne):
             for j in range(self.tailleColonne):
-                try:
-                    if self.lignes[i][j]!=grille2.lignes[i][j]:
-                        
-                        return False
-                except:
+                if self.lignes[i][j]!=grille2.lignes[i][j]:                   
                     return False
-
+          
         return True
+    
             
     def _compteTrou(self,liste):
         """compte le nombre de case vide
@@ -267,7 +266,7 @@ class Grille:
         
     def _positionsFinal(self):
         """
-            finalise la creation des indexs et vide la grille qui a servie à creer les indexs
+            finalise la creation des coordonnee et vide la grille qui a servie à creer les coordonnee
         Returns:
             List[List[Case]]: une copie de la Grille de depart
         """
@@ -292,10 +291,10 @@ class Grille:
         return tempo
 
     def getPosition(self):
-        """renvoie les indexs
+        """renvoie les coordonnee
 
         Returns:
-            Dict[Type:Liste[int]]: les indexs
+            Dict[Type:Liste[int]]: les coordonnee
         """
         return self._position
 
@@ -312,11 +311,11 @@ class Grille:
             List[int,list[int]]: en [0], le nombre de cases libres au milieu de la lign/colonne, en [1] la liste des bornes
         """
         liste=self.grille[type][index]
-        indexs=self._positionModifiable[type][index]
+        coordonnee=self._positionModifiable[type][index]
         place=[]
         
-        debut=self._verifLimiteDebut(liste,indexs,compte=True)
-        fin=self._verifLimiteFin(liste,indexs,compte=True)
+        debut=self._verifLimiteDebut(liste,coordonnee,compte=True)
+        fin=self._verifLimiteFin(liste,coordonnee,compte=True)
         
         tempo=len(liste)-debut[1]+(fin[1]+1)
         i=debut[1]
@@ -355,19 +354,19 @@ class Grille:
                 return False
         return True
     
-    def _verifLimiteDebut(self,liste,indexs,compte=False):
+    def _verifLimiteDebut(self,liste,coordonnee,compte=False):
         """
         regarde si il y a une partie de la ligne rempli (pour un index en plusieurs parties, si la premiere partie est validé)
         Args:
             liste (_type_): _description_
-            indexs (_type_): _description_
+            coordonnee (_type_): _description_
             compte (bool, optional): _description_. Defaults to False.
 
         Returns:
             _type_: _description_
         """
         result=False
-        indexs=copy.deepcopy(indexs)
+        coordonnee=copy.deepcopy(coordonnee)
         try:
             i=liste.index(Case())
             tempo=liste[0:i]
@@ -393,9 +392,9 @@ class Grille:
         except:
             return result,compteur,0
     
-    def _verifLimiteFin(self,liste,indexs,compte=False):
+    def _verifLimiteFin(self,liste,coordonnee,compte=False):
         result=False
-        indexs=copy.deepcopy(indexs)
+        coordonnee=copy.deepcopy(coordonnee)
         inverser=liste[::-1]
         try:
             i=inverser.index(Case())
@@ -411,7 +410,7 @@ class Grille:
                 result=True
                 
             if not compte and tempo[i].getValeur()==False:
-                indexs=indexs[::-1]
+                coordonnee=coordonnee[::-1]
                 aEnlever=self._positionParLigne(tempo[:i])
             
             if len(aEnlever)!=0 and tempo[-1].getValeur() is True:
@@ -449,109 +448,85 @@ class Grille:
       
       
      
-    def remplis(self,type,indexs):
+    def remplis(self,type,index):
         
-        coordonnee=indexs
-        liste:list[Case]=self.grille[type][coordonnee]
+        
+        liste:list[Case]=self.grille[type][index]
 
         if self._verifLigneRemplis(liste):
             return
         
-        nbLibres=self._comptePlaceLibre(type,coordonnee)
-        
-      
-        
-        
-        indexs=self._position[type][coordonnee]#donne la liste d'indice correspondant a la ligne/colonne
-        
+        nbLibres=self._comptePlaceLibre(type,index)
+        coordonnee=self._position[type][index]#donne la liste d'indice correspondant a la ligne/colonne
         trous=self._compteTrou(liste)
-        
-        
-        if coordonnee==1 and type==Type.colonne:
+        """    
+        if index==1 and type==Type.colonne:
             pass
-       
+        """
         
-        
-        limiteDebut=self._verifLimiteDebut(liste,indexs)
-        limiteFin=self._verifLimiteFin(liste,indexs)
-        
-
-
-        
-        indexsModif=indexs[limiteDebut[2]:len(indexs)-limiteFin[2]]
-        
-        nbARemplir=len(indexsModif)+sum(indexsModif)-1
-        
-        compteur=0
+        limiteDebut=self._verifLimiteDebut(liste,coordonnee)
+        limiteFin=self._verifLimiteFin(liste,coordonnee)
+        coordonneeModif=coordonnee[limiteDebut[2]:len(coordonnee)-limiteFin[2]]
+        nbARemplir:int=(len(coordonneeModif)-1)+sum(coordonneeModif)
+        compteur:int=0
         premier_trou=trous[0]
-        premier_non_nul=self.premierNonNul(type,coordonnee,limiteDebut[1])
+        premier_non_nul=self.premierNonNul(type,index,limiteDebut[1])
         dernier_trou=trous[-1]
-        dernier_non_nul=self.dernierNonNul(type,coordonnee,limiteFin[1])
-        
-       
-
-        indexs_entre_bornes=self._positionParLigne(liste[premier_non_nul[0]:len(liste)+dernier_non_nul[0]+1])
+        dernier_non_nul=self.dernierNonNul(type,index,limiteFin[1])
+        coordonnee_entre_bornes=self._positionParLigne(liste[premier_non_nul[0]:len(liste)+dernier_non_nul[0]+1])
 
         
-        if (not indexsModif) or indexs==self._positionParLigne(liste):
-            for i in range(len(liste)):
-                liste[i].transformeFaux()
+        if (not coordonneeModif) or coordonnee==self._positionParLigne(liste):
+            for i in liste:
+                i.transformeFaux()
         
         elif nbARemplir==len(liste[limiteDebut[1]:len(liste)+limiteFin[1]+1]):
             compteur=limiteDebut[1]
             
-            for i in indexsModif:
-                for y in range(i):
-                    
+            for i in coordonneeModif:#[2,2,2]
+                for y in range(i): 
                     liste[compteur].transformeVrai()
                     compteur+=1    
                 
-                if compteur!=len(liste) :
+                if compteur<len(liste) :
                     liste[compteur].transformeFaux()
-                compteur+=1
+                    compteur+=1
         
-        elif dernier_trou<indexsModif[-1] and dernier_non_nul[1] is False:
-            compteur=dernier_non_nul[0]
+        elif dernier_trou<coordonneeModif[-1] and dernier_non_nul[1] is False:
+            #[ , , , , ,F, , ] [1,3]
+            compteur=dernier_non_nul[0]#-1
             while liste[compteur].getValeur() is not False:
                 liste[compteur].transformeFaux()
                 compteur-=1
+            
                 
-        elif premier_trou<indexsModif[0] and premier_non_nul[1] is False:
+        elif premier_trou<coordonneeModif[0] and premier_non_nul[1] is False:
             compteur=premier_non_nul[0]
             while liste[compteur].getValeur() is not False:
                 liste[compteur].transformeFaux()
                 compteur+=1
         
         elif limiteDebut[0]:
-            compteur=limiteDebut[1]
-            for i in range(indexsModif[0]):
-                
+            #[F,V,F,V, ] [1,2]
+            compteur=limiteDebut[1]#0
+            
+            for i in range(coordonneeModif[0]):
                 liste[compteur].transformeVrai()
                 compteur+=1
-            if compteur<len(liste):
-                liste[compteur].transformeFaux()
+                
+            liste[compteur].transformeFaux()
         
         elif limiteFin[0]:
             compteur=limiteFin[1]
-            for i in range(indexsModif[-1]):
+            for i in range(coordonneeModif[-1]):
                 liste[compteur].transformeVrai()
                 compteur-=1
-            #if -(compteur+1)<len(liste):
+           
             liste[compteur].transformeFaux()
-            pass
-                
-        elif not indexsModif and not self._verifLigneRemplis(liste):
-            for i in liste:
-                if i.getValeur() is None:
-                    i.transformeFaux()
-        
-        elif indexs==self._positionParLigne(liste) and not self._verifLigneRemplis(liste):
-            for i in liste:
-                i.transformeFaux() 
        
                       
-        elif nbLibres[0]==nbARemplir and len(indexs)>1  and not self._verifLigneRemplis(liste):
-            for i in indexsModif:
+        elif nbLibres[0]==nbARemplir and len(coordonnee)>1:
+            for i in coordonneeModif:
                 for j in range(i):
                     liste[compteur].transformeVrai()
                     compteur+=1
@@ -562,7 +537,7 @@ class Grille:
                     
 
             
-        elif premier_trou<=indexsModif[0] and premier_non_nul[1]:
+        elif premier_trou<=coordonneeModif[0] and premier_non_nul[1]:
 
             compteur=premier_non_nul[0]+premier_trou
             
@@ -570,15 +545,15 @@ class Grille:
             while liste[compteur].getValeur():
                 compteur+=1
 
-            if (compteur-indexsModif[0])>=0:
-                for i in range(compteur-indexsModif[0]+1,compteur):
+            if (compteur-coordonneeModif[0])>=0:
+                for i in range(compteur-coordonneeModif[0]+1,compteur):
 
                     liste[i].transformeVrai()
-                for i in range(0,compteur-indexsModif[0]):
+                for i in range(0,compteur-coordonneeModif[0]):
                     liste[i].transformeFaux()
       
         
-        elif dernier_trou<=indexsModif[-1] and dernier_non_nul[1] and len(indexsModif)!=1 and premier_trou==nbARemplir:
+        elif dernier_trou<=coordonneeModif[-1] and dernier_non_nul[1] and len(coordonneeModif)!=1 and premier_trou==nbARemplir:
             
             compteur=dernier_non_nul[0]+dernier_trou
             
@@ -588,40 +563,40 @@ class Grille:
                 compteur+=1
             
             
-            for i in range(compteur+indexsModif[0],compteur):
+            for i in range(compteur+coordonneeModif[0],compteur):
 
                 liste[i].transformeVrai()
                 
-            for i in range(compteur+indexsModif[0],len(liste)):
+            for i in range(compteur+coordonneeModif[0],len(liste)):
                 liste[i].transformeFaux()
                 
-        elif premier_trou==indexsModif[0] and dernier_trou<nbARemplir and dernier_non_nul[1]==False:
+        elif premier_trou==coordonneeModif[0] and dernier_trou<nbARemplir and dernier_non_nul[1]==False:
             compteur=premier_non_nul[0]
             while liste[compteur].getValeur()!=False:
                 liste[compteur].transformeVrai()
                 compteur+=1
                     
-        elif dernier_trou==indexsModif[-1] and premier_trou<nbARemplir and premier_non_nul[1]==False :
+        elif dernier_trou==coordonneeModif[-1] and premier_trou<nbARemplir and premier_non_nul[1]==False :
             compteur=dernier_non_nul[0]
             while liste[compteur].getValeur()!=False:
                 liste[compteur].transformeVrai() 
                 compteur-=1
            
-        elif dernier_trou<indexsModif[-1] and not dernier_non_nul[1]:
+        elif dernier_trou<coordonneeModif[-1] and not dernier_non_nul[1]:
             compteur=limiteFin[1]
 
             while (liste[compteur].getValeur() is None) and (-compteur)<len(liste):
                 liste[compteur].transformeFaux()
                 compteur-=1
         
-        elif premier_trou<indexsModif[0] and not premier_non_nul[1]:
+        elif premier_trou<coordonneeModif[0] and not premier_non_nul[1]:
             compteur=limiteDebut[1]
 
             while (liste[compteur].getValeur() is None) and (compteur)<len(liste):
                 liste[compteur].transformeFaux()
                 compteur+=1
                 
-        elif len(indexs)==1 and len(self._positionParLigne(liste))>1 and not self._verifLigneRemplis(liste):
+        elif len(coordonnee)==1 and len(self._positionParLigne(liste))>1 and not self._verifLigneRemplis(liste):
            
         
             while (len(self._positionParLigne(liste))!=1):
@@ -637,13 +612,13 @@ class Grille:
                     liste[i].transformeVrai()
                     i+=1
                     
-        elif len(indexs)==1 and not self._verifLigneRemplis(liste):
+        elif len(coordonnee)==1 and not self._verifLigneRemplis(liste):
             tempo=0
             for i in range(len(liste)):
                 tempo=i
                 if liste[i].getValeur()==True:
                     break
-            for j in range(tempo+indexs[0],len(liste)):
+            for j in range(tempo+coordonnee[0],len(liste)):
                 liste[j].transformeFaux()
             
             
@@ -652,7 +627,7 @@ class Grille:
                 tempo=k
                 if liste[k].getValeur()==True:
                     break
-            for l in range(tempo-indexs[0],-1,-1):
+            for l in range(tempo-coordonnee[0],-1,-1):
                 liste[l].transformeFaux()
             
             while len(self._positionParLigne(liste))>1:
@@ -665,7 +640,7 @@ class Grille:
                     liste.tempo[tempo].transformeVrai()
                     tempo+=1          
         
-        elif max(trous)<min(indexsModif) and not self._verifLigneRemplis(liste):
+        elif max(trous)<min(coordonneeModif) and not self._verifLigneRemplis(liste):
             i=0
             try:
                 while i+max(trous)<len(liste):
@@ -676,21 +651,21 @@ class Grille:
                     i+=1
             except:
                 pass
-        elif trous==indexsModif:
+        elif trous==coordonneeModif:
             for i in liste:
                 i.transformeVrai()
         
-        elif dernier_trou<indexsModif[-1] and dernier_non_nul[1]:
+        elif dernier_trou<coordonneeModif[-1] and dernier_non_nul[1]:
             compteur=dernier_non_nul[0]
             while liste[compteur].getValeur() is None:
                 compteur-=1
             while liste[compteur].getValeur is True:
                 compteur-=1
             if liste[compteur-1].getValeur() is False:
-                for i in range(len(liste)+compteur,len(liste)+compteur+indexsModif[-1]):
+                for i in range(len(liste)+compteur,len(liste)+compteur+coordonneeModif[-1]):
                     liste[i].transformeVrai()
                     
-        elif premier_trou<indexsModif[0] and premier_non_nul[1]:
+        elif premier_trou<coordonneeModif[0] and premier_non_nul[1]:
             compteur=premier_non_nul[0]
             while liste[compteur].getValeur() is None:
                 compteur+=1
@@ -700,7 +675,7 @@ class Grille:
         
         elif premier_non_nul[0]-dernier_non_nul[0]>nbARemplir-1:
             superposition1=[]
-            for i in indexsModif:
+            for i in coordonneeModif:
                 for j in range(i):
                     superposition1.append([True,i])
                 superposition1.append(False)
@@ -710,25 +685,25 @@ class Grille:
                 superposition1.append[False,None]
             superposition2=superposition1[::-1]
             
-            position_indexs=[]
+            position_coordonnee=[]
             
             for i in range(len(superposition1)):
                 if superposition1[i]==superposition2[i]:
-                    position_indexs.append(i+premier_non_nul[0])
+                    position_coordonnee.append(i+premier_non_nul[0])
             
-            ensemble_position_indexs=[]
+            ensemble_position_coordonnee=[]
             tempo=[]
-            for i in range(len(position_indexs)-1):
-                if position_indexs[i]==position_indexs[i+1]:
+            for i in range(len(position_coordonnee)-1):
+                if position_coordonnee[i]==position_coordonnee[i+1]:
                     tempo.append(i)
                 else:
                     tempo.append[i]
-                    ensemble_position_indexs.append(tempo)
+                    ensemble_position_coordonnee.append(tempo)
                     tempo=[]
                     
                     
         
-        elif max(indexs_entre_bornes)==max(indexsModif):
+        elif max(coordonnee_entre_bornes)==max(coordonneeModif):
             tempo=0
             position_tempo=None
             liste_a_borner=[]
@@ -740,7 +715,7 @@ class Grille:
                         liste_a_borner.append(position_tempo)
                     tempo+=1
                 elif liste[i].getValeur() is None:
-                    if tempo==max(indexs_entre_bornes) and liste[i-1].getValeur() is True:
+                    if tempo==max(coordonnee_entre_bornes) and liste[i-1].getValeur() is True:
                         liste_a_borner.append(i)
                         tempo=0
                         position_tempo=None
@@ -764,6 +739,7 @@ class Grille:
         grille2=Grille()
         while not self.grilleEgal(grille2):
             grille2=self.copie()
+            
             for j in range(self.tailleColonne):
                 for i in range(self.tailleLigne):
                     self.remplis(Type.ligne,i)
