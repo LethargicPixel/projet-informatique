@@ -61,12 +61,12 @@ class Grille:
         
     def __init__(self) -> None:
         
-        self.lignes=[[]]
-        self.colonnes=[[]]
-        self.tailleLigne=0
-        self.tailleColonne=0
+        self.lignes:list[list[Case]]=[[]]
+        self.colonnes:list[list[Case]]=[[]]
+        self.tailleLigne:int=0
+        self.tailleColonne:int=0
         self._position:dict[str:list[int]] = {Type.colonne: {}, Type.ligne: {}}
-        self._positionModifiable = {Type.colonne: {}, Type.ligne: {}}
+        self._positionModifiable:dict[str:list[int]] = {Type.colonne: {}, Type.ligne: {}}
         self.grille={}
 
     def copie(self):
@@ -160,7 +160,21 @@ class Grille:
         
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         self._positionModifiable=copy.deepcopy(self._position)
-  
+    
+    def creerGrilleParLigne(self,liste_ligne:list[list[Case]]):
+        
+        self.lignes=liste_ligne
+        self.colonnes=[[]]
+        self.tailleColonne=len(liste_ligne)
+        self.tailleLigne=len(liste_ligne[0])
+        
+        for i in range(self.tailleColonne):
+            self.colonnes.append([])
+            for j in range(self.tailleLigne):
+                self.colonnes[i].append(self.lignes[j][i])
+        self.colonnes.pop()
+        self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
+        self._positionModifiable=copy.deepcopy(self._position)
          
         
     def _positions(self,liste):
@@ -721,10 +735,11 @@ class Grille:
             return [Case(False) for i in range(taille)]
         a_tester=list(product([Case(True),Case(False)],repeat=taille))
         for i in a_tester:
-                
             coordonnee_tempo=self._positionParLigne(i)
+            
             if coordonnee_tempo==coordonnee:
                 resultat.append(i)
+                
         return resultat
     
     def resoudBrutForce(self):
@@ -732,7 +747,8 @@ class Grille:
         total_ligne=[]
         for i in self._position[Type.ligne]:
             total_ligne.append(self._ligneBrutForce(i,self.tailleLigne))
-        print(total_ligne)
+        
+        
             
         
 
