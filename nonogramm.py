@@ -77,7 +77,7 @@ class Grille:
         """    
         return copy.deepcopy(self)
     
-    def creerGrilleHasard(self,tailleLigne,tailleColonne=None):
+    def creerGrilleHasard(self,tailleLigne,tailleColonne=None,effacement=False):
         """creer une grille au hasard
 
         Args:
@@ -107,7 +107,7 @@ class Grille:
         self.colonnes.pop()
         
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
-        self._positionsFinal()
+        self._positionsFinal(effacement)
     
     def creerGrilleParIndex(self,*positions):
         """creer une grille avec les coordonnee donné en parametre
@@ -161,7 +161,7 @@ class Grille:
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         self._positionModifiable=copy.deepcopy(self._position)
     
-    def creerGrilleParLigne(self,liste_ligne:list[list[Case]]):
+    def creerGrilleParLigne(self,liste_ligne:list[list[Case]],effacement=False):
         
         self.lignes=liste_ligne
         self.colonnes=[[]]
@@ -173,6 +173,8 @@ class Grille:
             for j in range(self.tailleLigne):
                 self.colonnes[i].append(self.lignes[j][i])
         self.colonnes.pop()
+        
+        self._positionsFinal(effacement)
         self.grille={Type.colonne:self.colonnes,Type.ligne:self.lignes}
         self._positionModifiable=copy.deepcopy(self._position)
          
@@ -278,12 +280,17 @@ class Grille:
         
         
         
-    def _positionsFinal(self):
+    def _positionsFinal(self,effacement=True):
         """
-            finalise la creation des coordonnee et vide la grille qui a servie à creer les coordonnee
+            finalise la creation des coordonnee
+       
+        Args:
+            effacement (bool, optional): efface ou non la grille de depart. Defaults to False.
+
         Returns:
             List[List[Case]]: une copie de la Grille de depart
-        """
+        
+        """        
         self._position[Type.colonne] = self._positions(self.colonnes)
         self._position[Type.ligne] = self._positions(self.lignes)
         self._positionModifiable=copy.deepcopy(self._position) 
@@ -297,9 +304,11 @@ class Grille:
             tempo.append([])
         tempo=tempo[:-1]
         
-        for i in self.lignes:
-            for y in i:
-                y.vider()
+        if effacement is True:
+                
+            for i in self.lignes:
+                for y in i:
+                    y.vider()
                 
              
         return tempo
@@ -730,9 +739,9 @@ class Grille:
                 liste[i].transformeFaux()           
     
     def _ligneBrutForce(self,coordonnee:list[int],taille:int):
-        resultat:list[list[int]]=[]
+        resultat:list[list[Case]]=[]
         if coordonnee[0]==0:
-            return [Case(False) for i in range(taille)]
+            return [[Case(False) for i in range(taille)]]
         a_tester=list(product([Case(True),Case(False)],repeat=taille))
         for i in a_tester:
             coordonnee_tempo=self._positionParLigne(i)
@@ -740,13 +749,55 @@ class Grille:
             if coordonnee_tempo==coordonnee:
                 resultat.append(i)
                 
-        return resultat
+        return list(map(list,resultat))
     
     def resoudBrutForce(self):
         grille_a_tester=Grille()
-        total_ligne=[]
+        total_ligne:list[list[list[Case]]]=[]
+        tempo:list[list[list[Case]]]=[]
+        
+        liste_indice:list[int]=[]
+        liste_indice_a_tester:list[int]=[0 for i in range(self.tailleLigne)]
+        
+        resultat:list[Grille]
+        
         for i in self._position[Type.ligne]:
             total_ligne.append(self._ligneBrutForce(i,self.tailleLigne))
+        
+        for i in total_ligne:
+            liste_indice.append(len(i))
+        
+        print(f"liste indice = {liste_indice}")
+        while liste_indice_a_tester!=liste_indice or liste_indice_a_tester:
+            tempo=[]
+            print(f"liste indice a tester = {liste_indice_a_tester}")
+            for i in range(len(liste_indice_a_tester)):
+                tempo.append(total_ligne[i][liste_indice_a_tester[i]])
+                
+            grille_a_tester.creerGrilleParLigne(copy.deepcopy(tempo),False)
+            if liste_indice_a_tester!=liste_indice:
+                
+                liste_indice_a_tester[-1]+=1
+            
+            for i in range(-1,-len(liste_indice_a_tester),-1):
+                if liste_indice_a_tester[i]>liste_indice[i]:
+                    liste_indice_a_tester[i-1]+=1
+                    liste_indice_a_tester[i]=0        
+                else:
+                    break
+            
+            if grille_a_tester.getPosition()==self.getPosition():
+                print("_________________")
+                print(f"liste indice a tester = {liste_indice_a_tester}")
+                grille_a_tester.afficher()
+                print("_________________")
+                
+                
+                
+                
+        
+        
+        
         
         
             
@@ -798,9 +849,9 @@ if __name__=="__main__":
     """ 
     #grille.resoud()
     print()
-    print(grille.getPosition())
+    #print(grille.getPosition())
     print()
-    grille.afficher()
+    #grille.afficher()
     print()
 
     
@@ -818,8 +869,8 @@ if __name__=="__main__":
             #print(a==b)
             print(i,j)
             print("________________________")
-            
-     """
+             """
+     
      
      
     

@@ -9,11 +9,11 @@
         "documentation": {}
     },
     {
-        "label": "ParameterizedMIMEHeader",
-        "importPath": "email.headerregistry",
-        "description": "email.headerregistry",
+        "label": "product",
+        "importPath": "itertools",
+        "description": "itertools",
         "isExtraImport": true,
-        "detail": "email.headerregistry",
+        "detail": "itertools",
         "documentation": {}
     },
     {
@@ -47,7 +47,7 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes=[[]]\n        self.colonnes=[[]]\n        self.tailleLigne=0\n        self.tailleColonne=0\n        self._position = {Type.colonne: {}, Type.ligne: {}}\n        self._positionModifiable = {Type.colonne: {}, Type.ligne: {}}\n        self.grille={}\n    def copie(self):",
+        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes:list[list[Case]]=[[]]\n        self.colonnes:list[list[Case]]=[[]]\n        self.tailleLigne:int=0\n        self.tailleColonne:int=0\n        self._position:dict[str:list[int]] = {Type.colonne: {}, Type.ligne: {}}\n        self._positionModifiable:dict[str:list[int]] = {Type.colonne: {}, Type.ligne: {}}\n        self.grille={}\n    def copie(self):",
         "detail": "nonogramm",
         "documentation": {}
     }
