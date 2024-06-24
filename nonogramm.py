@@ -522,37 +522,24 @@ class Grille:
                 liste[compteur].transformeVrai()
                 compteur-=1
            
-            liste[compteur].transformeFaux()
-       
-                      
-        elif nbLibres[0]==nbARemplir and len(coordonnee)>1:
-            for i in coordonneeModif:
-                for j in range(i):
-                    liste[compteur].transformeVrai()
-                    compteur+=1
-
-                if compteur<len(liste):
-                    liste[compteur].transformeFaux()
-                    compteur+=1
-                    
-
-            
+            liste[compteur].transformeFaux()                    
+        
+        #peut etre present en bas
         elif premier_trou<=coordonneeModif[0] and premier_non_nul[1]:
-
+            #[ , ,V, , ]  [2,1]
             compteur=premier_non_nul[0]+premier_trou
             
-
-            while liste[compteur].getValeur():
+            while liste[compteur].getValeur() is True or compteur<len(liste)-1:
                 compteur+=1
 
             if (compteur-coordonneeModif[0])>=0:
                 for i in range(compteur-coordonneeModif[0]+1,compteur):
-
                     liste[i].transformeVrai()
+                    
                 for i in range(0,compteur-coordonneeModif[0]):
                     liste[i].transformeFaux()
-      
         
+        #idem
         elif dernier_trou<=coordonneeModif[-1] and dernier_non_nul[1] and len(coordonneeModif)!=1 and premier_trou==nbARemplir:
             
             compteur=dernier_non_nul[0]+dernier_trou
@@ -571,6 +558,7 @@ class Grille:
                 liste[i].transformeFaux()
                 
         elif premier_trou==coordonneeModif[0] and dernier_trou<nbARemplir and dernier_non_nul[1]==False:
+            #[1,2,3] []
             compteur=premier_non_nul[0]
             while liste[compteur].getValeur()!=False:
                 liste[compteur].transformeVrai()

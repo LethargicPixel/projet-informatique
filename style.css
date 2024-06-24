@@ -1,3 +1,28 @@
 .btn{
 	border-radius: 5px;
 }
+td>p{
+	display: flex;
+	justify-content: center;
+}
+td{
+	padding:0;
+	border-width: 2px;
+}
+#divTable{
+	display: flex;
+	justify-content: center;
+	border:0
+}
+td>p{
+	margin:0
+}
+td>img{
+	top:auto
+}
+#grille{
+	border-collapse: collapse;
+	margin: 10px;
+	border-color: black;
+	border-spacing: 0;
+}
