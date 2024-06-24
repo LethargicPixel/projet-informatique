@@ -1,6 +1,7 @@
 import copy
 from itertools import product
 from random import randint
+import time
 
 
 
@@ -758,26 +759,24 @@ class Grille:
         
         liste_indice:list[int]=[]
         liste_indice_a_tester:list[int]=[0 for i in range(self.tailleLigne)]
-        
-        resultat:list[Grille]
+        liste_indice_a_tester[-1]-=1
+        resultat:list[Grille]=[]
         
         for i in self._position[Type.ligne]:
             total_ligne.append(self._ligneBrutForce(i,self.tailleLigne))
         
         for i in total_ligne:
-            liste_indice.append(len(i))
+            liste_indice.append(len(i)-1)
         
-        print(f"liste indice = {liste_indice}")
-        while liste_indice_a_tester!=liste_indice or liste_indice_a_tester:
-            tempo=[]
-            print(f"liste indice a tester = {liste_indice_a_tester}")
-            for i in range(len(liste_indice_a_tester)):
-                tempo.append(total_ligne[i][liste_indice_a_tester[i]])
+        
+        fin_de_boucle=False
+        while (liste_indice_a_tester!=liste_indice) and not fin_de_boucle:
                 
-            grille_a_tester.creerGrilleParLigne(copy.deepcopy(tempo),False)
-            if liste_indice_a_tester!=liste_indice:
-                
+            if liste_indice==liste_indice_a_tester and liste_indice.count(0)==len(liste_indice):
+                fin_de_boucle=True
+            else:
                 liste_indice_a_tester[-1]+=1
+            
             
             for i in range(-1,-len(liste_indice_a_tester),-1):
                 if liste_indice_a_tester[i]>liste_indice[i]:
@@ -785,13 +784,23 @@ class Grille:
                     liste_indice_a_tester[i]=0        
                 else:
                     break
+                
+                
+                
+            tempo=[]
+            
+            for i in range(len(liste_indice_a_tester)):
+                tempo.append(total_ligne[i][liste_indice_a_tester[i]])
+                
+            grille_a_tester.creerGrilleParLigne(copy.deepcopy(tempo),False)
+            
+            
             
             if grille_a_tester.getPosition()==self.getPosition():
-                print("_________________")
-                print(f"liste indice a tester = {liste_indice_a_tester}")
-                grille_a_tester.afficher()
-                print("_________________")
-                
+
+                resultat.append(grille_a_tester)
+        
+        return resultat
                 
                 
                 
@@ -842,9 +851,12 @@ if __name__=="__main__":
         [[2,1],[3,1,1],[1,2,4],[4],[1,2,1,1],[2,2],[1,2,1],[2,1,1],[1,2,1],[4,1,1]]
         ) """
     
-    grille.creerGrilleHasard(2)
-    print(grille.getPosition())
-    grille.resoudBrutForce()
+    grille.creerGrilleHasard(7)
+    #grille.creerGrilleParIndex([[1],[2]],[[1],[2]])
+    avant=time.time()
+    print(len(grille.resoudBrutForce()))
+    print(round(time.time()-avant,5))
+    
 
     """ 
     #grille.resoud()
