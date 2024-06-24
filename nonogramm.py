@@ -798,9 +798,9 @@ class Grille:
             
             if grille_a_tester.getPosition()==self.getPosition():
 
-                resultat.append(grille_a_tester)
+                resultat=grille_a_tester
         
-        return resultat
+                return resultat
                 
                 
                 
@@ -853,8 +853,9 @@ if __name__=="__main__":
     
     grille.creerGrilleHasard(7)
     #grille.creerGrilleParIndex([[1],[2]],[[1],[2]])
+    print(grille.getPosition())
     avant=time.time()
-    print(len(grille.resoudBrutForce()))
+    grille.resoudBrutForce().afficher()
     print(round(time.time()-avant,5))
     
 
