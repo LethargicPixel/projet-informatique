@@ -1,5 +1,5 @@
 import copy
-from email.headerregistry import ParameterizedMIMEHeader
+from itertools import product
 from random import randint
 
 
@@ -65,7 +65,7 @@ class Grille:
         self.colonnes=[[]]
         self.tailleLigne=0
         self.tailleColonne=0
-        self._position = {Type.colonne: {}, Type.ligne: {}}
+        self._position:dict[str:list[int]] = {Type.colonne: {}, Type.ligne: {}}
         self._positionModifiable = {Type.colonne: {}, Type.ligne: {}}
         self.grille={}
 
@@ -135,13 +135,13 @@ class Grille:
         if somme1!=somme2:
             return False
         
-        self._position[Type.colonne]={}
+        self._position[Type.colonne]=[]
         for i in range(len(sequence1)):
-            self._position[Type.colonne][i]=sequence1[i]    
+            self._position[Type.colonne].append(sequence1[i])    
                 
-        self._position[Type.ligne]={}
+        self._position[Type.ligne]=[]
         for i in range(len(sequence2)):
-            self._position[Type.ligne][i]=sequence2[i]
+            self._position[Type.ligne].append(sequence2[i])
         
 
 
@@ -173,9 +173,9 @@ class Grille:
             Liste[Liste[int]]: tous les coordonnee pour ce sens de la grille
         """
         tempo=liste[:]
-        result={}
+        result=[]
         for i in range(len(tempo)):
-            result[i]=self._positionParLigne(tempo[i])
+            result.append(self._positionParLigne(tempo[i]))
 
         return result
     
@@ -192,7 +192,7 @@ class Grille:
         result=[]
         for y in liste:
             tempo=y.getValeur()
-            if tempo is None or not tempo:
+            if tempo is not True:
                 tempo=0
             
             if compte!=compte+tempo:
@@ -714,7 +714,29 @@ class Grille:
                         
             for i in liste_a_borner:
                 liste[i].transformeFaux()           
+    
+    def _ligneBrutForce(self,coordonnee:list[int],taille:int):
+        resultat:list[list[int]]=[]
+        if coordonnee[0]==0:
+            return [Case(False) for i in range(taille)]
+        a_tester=list(product([Case(True),Case(False)],repeat=taille))
+        for i in a_tester:
                 
+            coordonnee_tempo=self._positionParLigne(i)
+            if coordonnee_tempo==coordonnee:
+                resultat.append(i)
+        return resultat
+    
+    def resoudBrutForce(self):
+        grille_a_tester=Grille()
+        total_ligne=[]
+        for i in self._position[Type.ligne]:
+            total_ligne.append(self._ligneBrutForce(i,self.tailleLigne))
+        print(total_ligne)
+            
+        
+
+                  
                 
                     
 
@@ -744,18 +766,21 @@ class Grille:
                     
                  
 if __name__=="__main__":
+    
+  
     grille=Grille()
     
-    grille.creerGrilleParIndex(
+    """  grille.creerGrilleParIndex(
         [[1,5],[1,1,1,1,1],[2,2,1,1],[5,4],[2,2],[1],[2],[1,1,1],[1,1,2],[2,1,3]],
         [[2,1],[3,1,1],[1,2,4],[4],[1,2,1,1],[2,2],[1,2,1],[2,1,1],[1,2,1],[4,1,1]]
-        )
+        ) """
     
-    #grille.creerGrilleHasard(10)
-   
+    grille.creerGrilleHasard(2)
+    print(grille.getPosition())
+    grille.resoudBrutForce()
 
-    
-    grille.resoud()
+    """ 
+    #grille.resoud()
     print()
     print(grille.getPosition())
     print()
@@ -778,4 +803,8 @@ if __name__=="__main__":
             print(i,j)
             print("________________________")
             
+     """
+     
+     
     
+ 
