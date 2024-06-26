@@ -80,12 +80,13 @@ class Grille:
         """
         return copy.deepcopy(self)
 
-    def creerGrilleHasard(self, tailleLigne, tailleColonne=None, effacement=False):
+    def creerGrilleHasard(self, tailleLigne, tailleColonne=None, effacement=True):
         """creer une grille au hasard
 
         Args:
             tailleLigne (int): nombre de ligne de la grille
             tailleColonne (int, optional): nombre de colonne de la ligne. Si non rempli, la grille sera carre avec le premier parametre comme reference
+            effacement (bool, optional): efface ou non la grille apres creation, default to True
         """
 
         if tailleColonne is None:
@@ -161,7 +162,7 @@ class Grille:
         self.grille = {Type.colonne: self.colonnes, Type.ligne: self.lignes}
         self._positionModifiable = copy.deepcopy(self._position)
 
-    def creerGrilleParLigne(self, liste_ligne: list[list[Case]], effacement=False):
+    def creerGrilleParLigne(self, liste_ligne: list[list[Case]], effacement=True):
 
         self.lignes = liste_ligne
         self.colonnes = [[]]
@@ -279,7 +280,7 @@ class Grille:
             finalise la creation des coordonnee
 
         Args:
-            effacement (bool, optional): efface ou non la grille de depart. Defaults to False.
+            effacement (bool, optional): efface ou non la grille de depart. Defaults to True.
 
         Returns:
             List[List[Case]]: une copie de la Grille de depart
@@ -472,8 +473,7 @@ class Grille:
 
         limiteDebut = self._verifLimiteDebut(liste, coordonnee)
         limiteFin = self._verifLimiteFin(liste, coordonnee)
-        coordonneeModif = coordonnee[limiteDebut[2]
-            :len(coordonnee)-limiteFin[2]]
+        coordonneeModif = coordonnee[limiteDebut[2]                                     :len(coordonnee)-limiteFin[2]]
         nbARemplir: int = (len(coordonneeModif)-1)+sum(coordonneeModif)
         compteur: int = 0
         premier_trou = trous[0]
@@ -786,20 +786,20 @@ class Grille:
                     self.remplis(Type.ligne, i)
                     self.remplis(Type.colonne, j)
 
-    def estPossibleColonne(self):
+    def estPossibleColonne(self,grille):
         """
         verifie si la grille en cours de resolution est une position pouvant amener à la resolution du jeu
 
         Returns:
             Bool
         """
-        
+
         for i in range(self.tailleColonne):
-            
-            a_tester: list[int] = self._positionParLigne(self.colonnes[i])
+
+            a_tester: list[int] = grille.getPosition()[Type.colonne][i]
             position_reel: list[int] = self.getPosition()[Type.colonne][i]
 
-            if not (max(a_tester) > max(position_reel) or sum(a_tester) > sum(position_reel)):
+            if (max(a_tester) > max(position_reel) or sum(a_tester) > sum(position_reel)):
                 return False
         return True
 
@@ -807,37 +807,47 @@ class Grille:
 
         if premiere_fois:
 
-            grille_a_tester = Grille()
             total_ligne: list[list[list[Case]]] = []
             liste_indice: list[int] = []
             liste_indice_a_tester: list[int] = [None]*self.tailleLigne
+           
 
             for i in self._position[Type.ligne]:
                 total_ligne.append(
                     self._ligneBrutForce(i, self.tailleLigne))
             for i in total_ligne:
-                liste_indice.append(len(i)-1)    
+                liste_indice.append(len(i)-1)
 
+        grille_a_tester = Grille()
         tempo: list[list[list[Case]]] = []
         if liste_indice_a_tester[index_liste_indice] is None:
             liste_indice_a_tester[index_liste_indice] = 0
         else:
             liste_indice_a_tester[index_liste_indice] += 1
-            if liste_indice_a_tester[index_liste_indice] > liste_indice[index_liste_indice]:
-                liste_indice_a_tester[index_liste_indice] = None
-                liste_indice_a_tester[index_liste_indice-1] += 1
+            for i in range(index_liste_indice,0,-1):
+                
+                if liste_indice_a_tester[i] > liste_indice[i]:
+                    liste_indice_a_tester[i] = None
+                    liste_indice_a_tester[i-1] += 1
+                    index_liste_indice-=1
+                else:
+                    break
+
+
 
         for i in range(len(liste_indice_a_tester)):
             if liste_indice_a_tester[i] is not None:
                 tempo.append(total_ligne[i][liste_indice_a_tester[i]])
             else:
                 break
+            
         if len(tempo) < self.tailleColonne:
             for i in range(self.tailleColonne-len(tempo)):
                 tempo.append([Case()]*self.tailleLigne)
+                
 
         grille_a_tester.creerGrilleParLigne(copy.deepcopy(tempo), False)
-        if grille_a_tester.estPossibleColonne():
+        if self.estPossibleColonne(grille_a_tester):
             if liste_indice_a_tester[-1] is not None:
                 return grille_a_tester
             else:
@@ -855,8 +865,8 @@ if __name__ == "__main__":
         [[2,1],[3,1,1],[1,2,4],[4],[1,2,1,1],[2,2],[1,2,1],[2,1,1],[1,2,1],[4,1,1]]
         ) """
 
-    grille.creerGrilleHasard(2)
-    # grille.creerGrilleParIndex([[1],[2]],[[1],[2]])
+   # grille.creerGrilleHasard(3)
+    grille.creerGrilleParIndex([[0],[2],[3]],[[1],[2],[2]])
     print(grille.getPosition())
     avant = time.time()
     grille.resoudBackTracking().afficher()
