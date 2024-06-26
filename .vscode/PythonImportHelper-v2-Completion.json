@@ -59,5 +59,14 @@
         "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes: list[list[Case]] = [[]]\n        self.colonnes: list[list[Case]] = [[]]\n        self.tailleLigne: int = 0\n        self.tailleColonne: int = 0\n        self._position: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}\n        self._positionModifiable: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}",
         "detail": "nonogramm",
         "documentation": {}
+    },
+    {
+        "label": "a",
+        "kind": 2,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "def a(b):\n    if b==3:\n        c=[1,2,3]\n    if b==0:\n        return\n    print(c)\n    c=c[:-1]\n    return a(b-1)\na(3)",
+        "detail": "test",
+        "documentation": {}
     }
 ]
