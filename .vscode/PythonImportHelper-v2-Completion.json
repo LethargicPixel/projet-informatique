@@ -34,6 +34,23 @@
         "documentation": {}
     },
     {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "position",
+        "importPath": "turtle",
+        "description": "turtle",
+        "isExtraImport": true,
+        "detail": "turtle",
+        "documentation": {}
+    },
+    {
         "label": "Type",
         "kind": 6,
         "importPath": "nonogramm",
@@ -58,6 +75,15 @@
         "description": "nonogramm",
         "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes: list[list[Case]] = [[]]\n        self.colonnes: list[list[Case]] = [[]]\n        self.tailleLigne: int = 0\n        self.tailleColonne: int = 0\n        self._position: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}\n        self._positionModifiable: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}",
         "detail": "nonogramm",
+        "documentation": {}
+    },
+    {
+        "label": "A",
+        "kind": 6,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "class A:\n    def __init__(self) -> None:\n        self.c=1\n    def a(self):\n        def b(self):\n            return self.c\n        return b(self)\na=A()\nprint(a.a())",
+        "detail": "test",
         "documentation": {}
     }
 ]
