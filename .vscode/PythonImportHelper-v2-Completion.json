@@ -25,20 +25,11 @@
         "documentation": {}
     },
     {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
-        "documentation": {}
-    },
-    {
         "label": "Type",
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Type:\n    colonne = \"colonne\"\n    ligne = \"ligne\"\nclass Case:\n    vrai = \"■\"\n    faux = \"X\"\n    def __init__(self, valeur=None):\n        self._valeur = valeur\n    def __str__(self):\n        match self._valeur:",
+        "peekOfCode": "class Type:\n    colonne = \"colonne\"\n    ligne = \"ligne\"\nclass Case:\n    vrai = \"■\"\n    faux = \"X\"\n    def __init__(self, valeur:bool=None):\n        self._valeur = valeur\n    def __str__(self) ->str:\n        match self._valeur:",
         "detail": "nonogramm",
         "documentation": {}
     },
@@ -47,7 +38,7 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Case:\n    vrai = \"■\"\n    faux = \"X\"\n    def __init__(self, valeur=None):\n        self._valeur = valeur\n    def __str__(self):\n        match self._valeur:\n            case True:\n                return Case.vrai\n            case False:",
+        "peekOfCode": "class Case:\n    vrai = \"■\"\n    faux = \"X\"\n    def __init__(self, valeur:bool=None):\n        self._valeur = valeur\n    def __str__(self) ->str:\n        match self._valeur:\n            case True:\n                return Case.vrai\n            case False:",
         "detail": "nonogramm",
         "documentation": {}
     },
@@ -56,7 +47,7 @@
         "kind": 6,
         "importPath": "nonogramm",
         "description": "nonogramm",
-        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes: list[list[Case]] = [[]]\n        self.colonnes: list[list[Case]] = [[]]\n        self.tailleLigne: int = 0\n        self.tailleColonne: int = 0\n        self._position: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}\n        self._positionModifiable: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}",
+        "peekOfCode": "class Grille:\n    def __init__(self) -> None:\n        self.lignes: list[list[Case]] = [[]]\n        self.colonnes: list[list[Case]] = [[]]\n        self.taille_ligne: int = 0\n        self.taille_colonne: int = 0\n        self._position: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}\n        self._position_modifiable: dict[str:list[int]] = {\n            Type.colonne: {}, Type.ligne: {}}",
         "detail": "nonogramm",
         "documentation": {}
     },

@@ -12,10 +12,10 @@ class Case:
     vrai = "■"
     faux = "X"
 
-    def __init__(self, valeur=None):
+    def __init__(self, valeur:bool=None):
         self._valeur = valeur
 
-    def __str__(self):
+    def __str__(self) ->str:
         match self._valeur:
             case True:
                 return Case.vrai
@@ -33,27 +33,27 @@ class Case:
             case _:
                 return " "
 
-    def __eq__(self, case2):
+    def __eq__(self, case2) -> bool:
         if isinstance(case2, Case):
             return case2.getValeur() == self.getValeur()
         return False
 
-    def getValeur(self):
+    def getValeur(self) ->bool|None:
         return self._valeur
 
-    def transformeVrai(self, force=False):
+    def transformeVrai(self, force:bool=False) ->None:
         if force:
             self._valeur = True
         elif self._valeur is None:
             self._valeur = True
 
-    def transformeFaux(self, force=False):
+    def transformeFaux(self, force:bool=False)->None:
         if force:
             self._valeur = False
         elif self._valeur is None:
             self._valeur = False
 
-    def vider(self):
+    def vider(self)->None:
         self._valeur = None
 
 
@@ -86,10 +86,10 @@ class Grille:
 
         return tempo
 
-    def remplace(self, grille_2):
+    def remplace(self, grille_2)->None:
         self.__dict__.update(grille_2.__dict__)
 
-    def creerGrilleHasard(self, taille_ligne, taille_colonne=None, effacement=True):
+    def creerGrilleHasard(self, taille_ligne:int, taille_colonne:int=None, effacement:bool=True)->None:
         """creer une grille au hasard
 
         Args:
@@ -122,7 +122,7 @@ class Grille:
         self.grille = {Type.colonne: self.colonnes, Type.ligne: self.lignes}
         self._positionsFinal(effacement)
 
-    def creerGrilleParIndex(self, *positions):
+    def creerGrilleParIndex(self, *positions:list[list[int]])->None:
         """creer une grille avec les coordonnee donné en parametre
 
         Args:
@@ -171,7 +171,7 @@ class Grille:
         self.grille = {Type.colonne: self.colonnes, Type.ligne: self.lignes}
         self._position_modifiable = dict(self._position)
 
-    def creerGrilleParLigne(self, liste_ligne: list[list[Case]], effacement=True):
+    def creerGrilleParLigne(self, liste_ligne: list[list[Case]], effacement:bool=True)->None:
 
         self.lignes = liste_ligne
         self.colonnes = [[]]
@@ -188,7 +188,7 @@ class Grille:
         self.grille = {Type.colonne: self.colonnes, Type.ligne: self.lignes}
         self._position_modifiable = dict(self._position)
 
-    def _positions(self, liste):
+    def _positions(self, liste:list[list[Case]])->list[list[int]]:
         """calcule les coordonnee pour un cote de la grille
 
         Args:
@@ -204,7 +204,7 @@ class Grille:
 
         return result
 
-    def _positionParLigne(self, liste):
+    def _positionParLigne(self, liste:list[Case])->list[int]:
         """calcule les coordonnee pour une seul ligne
 
         Args:
@@ -237,7 +237,7 @@ class Grille:
 
         return result
 
-    def grilleEgal(self, grille_2):
+    def grilleEgal(self, grille_2)->bool:
         """verifie si les deux grilles ont les memes valeurs aux memes endroit
 
         Args:
@@ -256,29 +256,20 @@ class Grille:
 
         return True
 
-    def _positionsFinal(self, effacement=True):
+    def _positionsFinal(self, effacement:bool=True)->None:
         """
             finalise la creation des coordonnee
 
         Args:
             effacement (bool, optional): efface ou non la grille de depart. Defaults to True.
 
-        Returns:
-            list[list[Case]]: une copie de la Grille de depart
-
         """
         self._position[Type.colonne] = self._positions(self.colonnes)
         self._position[Type.ligne] = self._positions(self.lignes)
         self._position_modifiable = dict(self._position)
-        tempo = [[]]
+        
 
-        for i in range(self.taille_ligne):
-
-            for j in self.lignes[i]:
-
-                tempo[i].append(j.getValeur())
-            tempo.append([])
-        tempo = tempo[:-1]
+ 
 
         if effacement is True:
 
@@ -286,9 +277,9 @@ class Grille:
                 for y in i:
                     y.vider()
 
-        return tempo
+       
 
-    def getPosition(self):
+    def getPosition(self)->dict[list[list[int]]]:
         """renvoie les coordonnee
 
         Returns:
