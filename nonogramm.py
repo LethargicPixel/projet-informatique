@@ -2,7 +2,6 @@ from itertools import product
 from random import randint
 import time
 import sys
-from turtle import position
 
 
 class Type:
@@ -810,65 +809,71 @@ class Grille:
 
                 a_tester: list[int] = grille.getPosition()[Type.colonne][i]
                 position_reel: list[int] = self.getPosition()[Type.colonne][i]
-                if a_tester[0]>position_reel[0]:
+                
+
+                if (max(a_tester) > max(position_reel) or sum(a_tester) > sum(position_reel)) or (sum(a_tester)+len(a_tester)-1)>(sum(position_reel)+len(position_reel)-1):
                     return False
-                elif (max(a_tester) > max(position_reel) or sum(a_tester) > sum(position_reel)):
+                
+                if len(a_tester)>len(position_reel):
                     return False
+                for i in range(len(a_tester)):
+                    if a_tester[i]>position_reel[i]:
+                        return False
             return True
 
-        if premiere_fois:
+        
 
-            total_ligne: list[list[list[Case]]] = []
-            liste_indice: list[int] = []
-            liste_indice_a_tester: list[int] = [None]*self.tailleLigne
+        total_ligne: list[list[list[Case]]] = []
+        liste_indice: list[int] = []
+        liste_indice_a_tester: list[int] = [None]*self.tailleLigne
 
-            for i in self._position[Type.ligne]:
-                total_ligne.append(
-                    self._ligneBrutForce(i, self.tailleLigne))
-            for i in total_ligne:
-                liste_indice.append(len(i)-1)
+        for i in self._position[Type.ligne]:
+            total_ligne.append(
+                self._ligneBrutForce(i, self.tailleLigne))
+        for i in total_ligne:
+            liste_indice.append(len(i)-1)
+            
+        while True :  
+            grille_a_tester = Grille()
+            tempo: list[list[list[Case]]] = []
+            if liste_indice_a_tester[index_liste_indice] is None:
+                liste_indice_a_tester[index_liste_indice] = 0
+            else:
+                liste_indice_a_tester[index_liste_indice] += 1
+                for i in range(index_liste_indice, 0, -1):
 
-        grille_a_tester = Grille()
-        tempo: list[list[list[Case]]] = []
-        if liste_indice_a_tester[index_liste_indice] is None:
-            liste_indice_a_tester[index_liste_indice] = 0
-        else:
-            liste_indice_a_tester[index_liste_indice] += 1
-            for i in range(index_liste_indice, 0, -1):
+                    if liste_indice_a_tester[i] > liste_indice[i]:
+                        liste_indice_a_tester[i] = None
+                        liste_indice_a_tester[i-1] += 1
+                        index_liste_indice -= 1
+                    else:
+                        break
 
-                if liste_indice_a_tester[i] > liste_indice[i]:
-                    liste_indice_a_tester[i] = None
-                    liste_indice_a_tester[i-1] += 1
-                    index_liste_indice -= 1
+            for i in range(len(liste_indice_a_tester)):
+                if liste_indice_a_tester[i] is not None:
+                    tempo.append(total_ligne[i][liste_indice_a_tester[i]])
                 else:
                     break
 
-        for i in range(len(liste_indice_a_tester)):
-            if liste_indice_a_tester[i] is not None:
-                tempo.append(total_ligne[i][liste_indice_a_tester[i]])
-            else:
-                break
+            if len(tempo) < self.tailleColonne:
+                for i in range(self.tailleColonne-len(tempo)):
+                    tempo.append([Case()]*self.tailleLigne)
 
-        if len(tempo) < self.tailleColonne:
-            for i in range(self.tailleColonne-len(tempo)):
-                tempo.append([Case()]*self.tailleLigne)
+            tempo=tempo[::]
+                
+            grille_a_tester.creerGrilleParLigne(tempo, False)
+            if index_liste_indice==7:
+                pass
+            if estPossibleColonne(self,grille_a_tester):
+                if liste_indice_a_tester[-1] is not None:
 
-        tempo=tempo[::]
-            
-        grille_a_tester.creerGrilleParLigne(tempo, False)
-        if estPossibleColonne(self,grille_a_tester):
-            if liste_indice_a_tester[-1] is not None:
+                    return grille_a_tester
+                elif grille_a_tester.getPosition() == self.getPosition():
 
-                return grille_a_tester
-            elif grille_a_tester.getPosition() == self.getPosition():
+                    return grille_a_tester
+                else:
 
-                return grille_a_tester
-            else:
-
-                return self.resoudBackTracking(liste_indice, liste_indice_a_tester, index_liste_indice+1, total_ligne, False)
-        else:
-
-            return self.resoudBackTracking(liste_indice, liste_indice_a_tester, index_liste_indice, total_ligne, False)
+                    index_liste_indice+=1
 
 
 if __name__ == "__main__":

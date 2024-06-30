@@ -1,14 +1,5 @@
 [
     {
-        "label": "copy",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "copy",
-        "description": "copy",
-        "detail": "copy",
-        "documentation": {}
-    },
-    {
         "label": "product",
         "importPath": "itertools",
         "description": "itertools",
@@ -40,14 +31,6 @@
         "importPath": "sys",
         "description": "sys",
         "detail": "sys",
-        "documentation": {}
-    },
-    {
-        "label": "position",
-        "importPath": "turtle",
-        "description": "turtle",
-        "isExtraImport": true,
-        "detail": "turtle",
         "documentation": {}
     },
     {
