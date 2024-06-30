@@ -1,271 +1,325 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <title>Nonogramm</title>
-    <link rel="stylesheet" type="text/css" href="./style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython_stdlib.js"></script>
-  </head>
-
-  <body onload="brython()">
-    <h1>Nonogramm</h1>
-    <div>
-      <p>methode de creation de la grille</p>
-      <input
-        class="btn"
-        type="button"
-        value="aleatoire"
-        id="btnAleatoire"
-        onclick="montreZone()"
-      />
-      <input
-        class="btn"
-        type="button"
-        value="index"
-        id="btnindex"
-        onclick="montreZone2()"
-      />
-    </div>
-
-    <div id="aleatoire" style="visibility: hidden">
-      <p id="message">
-        attention, toutes valeures depassant 10 peu faire ralentir le proggramme
-      </p>
-      <label for="entreeTaille">rentrez la taille de la grille :</label>
-      <input type="number" id="entreeTaille" />
-      <input class="btn" type="button" id="btnValider" value="Validez" />
-    </div>
-
-    <div id="divTable">
-      <table id="grille"></table>
-    </div>
-    <div>
-      <input
-        type="button"
-        id="montreIndex"
-        class="btn"
-        value="creer les indices"
-        style="display: none"
-      />
-    </div>
-    <div style="flex-direction: column">
-      <p id="msgApresIndice" style="visibility: hidden">
-        par qui voulez vous que le nonogramm soit remplis ?
-      </p>
-
-      <div>
-        <input
-          type="button"
-          value="ordinateur"
-          class="btn"
-          id="ordi"
-          style="visibility: hidden"
-        />
-        <input
-          type="button"
-          value="joueur"
-          class="btn"
-          id="joueur"
-          style="visibility: hidden"
-        />
-      </div>
-    </div>
-
-    <script>
-      let btnAleatoire = document.getElementById("btnAleatoire");
-      let btnImport = document.getElementById("btnindex");
-      let btnValider = document.getElementById("btnValider");
-      let entreeTaille = document.getElementById("entreeTaille");
-      let btnIndice = document.getElementById("montreIndex");
-      let grille = document.getElementById("grille");
-      let btnOrdi = document.getElementById("ordi");
-      let btnJoueur = document.getElementById("joueur");
-
-      let taille = 0;
-      let idPremiereColonne = [];
-      let idPremiereLigne = [];
-      grille.border = 1;
-
-      function montreZone() {
-        document.getElementById("aleatoire").style.visibility = "visible";
-      }
-
-      function construitGrille(event) {
-        if (event.type == "click" || event.key === "Enter") {
-          while (grille.rows.length > 0) {
-            grille.deleteRow(0);
-          }
-
-          const taille_image = screen.width / entreeTaille.value / 5;
-          btnIndice.style.visibility = "hidden";
-
-          if (entreeTaille.value > 0) {
-            btnOrdi.style.visibility = "hidden";
-            btnJoueur.style.visibility = "hidden";
-            btnIndice.style = "visibility:visible";
-            document.getElementById("msgApresIndice").style.visibility =
-              "hidden";
-
-            taille = entreeTaille.value;
-
-            for (i = 0; i <= taille; i++) {
-              var ligne = grille.insertRow();
-
-              for (j = 0; j <= taille; j++) {
-                var image_blanche = document.createElement("img");
-                image_blanche.setAttribute("src", "images/blanc.png");
-                image_blanche.setAttribute("width", taille_image);
-                image_blanche.setAttribute("length", taille_image);
-                var cellule = ligne.insertCell();
-                var paragraphe = document.createElement("p");
-
-                if ((i != 0 && j != 0) || (i == j && i == 0)) {
-                  cellule.appendChild(image_blanche);
-                } else {
-                  cellule.appendChild(paragraphe);
-                }
-                cellule.id = i + "," + j;
-              }
-            }
-            creerlisteId();
-          }
-        }
-      }
-
-      function creerlisteId() {
-        idPremiereColonne = [];
-        idPremiereLigne = [];
-        for (i = 1; i <= taille; i++) {
-          idPremiereColonne.push(`${i},0`);
-          idPremiereLigne.push(`0,${i}`);
-        }
-      }
-      function listeId() {
-        return [idPremiereColonne, idPremiereLigne, taille];
-      }
-
-      entreeTaille.addEventListener("keydown", construitGrille);
-      btnValider.addEventListener("click", construitGrille);
-    </script>
-
-    <script type="text/python">
-      from browser import document
-      from browser import html
-      from browser import window
-      from nonogramm import Grille, Type
-
-      btnValider=document["btnValider"]
-      entreeTaille=document["entreeTaille"]
-
-      tableau=document["grille"]
-
-      aResoudre=Grille()
-      resolu=Grille()
-
-      montreIndex=document["montreIndex"]
-      btnOrdi=document["ordi"]
-      btnJoueur=document["joueur"]
-
-      idPremiereLigne=[]
-      idPremiereColonne=[]
-
-      def aleatoire(ev):
-      	if ev.type=="click":
-      		ev.key="Enter"
-      	if ev.key=="Enter" or ev.type=="click":
-
-      		taille=window.listeId()[2]
-
-      		if taille=='':
-      			taille=0
-      		taille=int(taille)
-
-
-      		if taille>0:
-
-      			aResoudre.creerGrilleHasard(taille,taille)
-      			resolu.lignes=aResoudre.copie()
-      			aResoudre.resoud()
-
-
-
-      def afficheIndexLigne(ev):
-
-      	index=aResoudre.getPosition()[Type.ligne]
-      	idPremiereLigne=list(window.listeId()[1])
-
-
-      	for i in idPremiereLigne:
-      		print
-
-      		celluleARemplir=document[i]
-      		identifiant=i.split(",")[1]
-
-
-      		chaine=index[int(identifiant)-1]
-
-      		chaine="<br>".join(map(str,chaine))
-
-
-      		document[i].removeChild(document[i].firstChild)
-      		document[i] <= html.P(chaine)
-
-
-
-
-      def afficheIndexColonne(ev):
-
-      	index=aResoudre.getPosition()[Type.colonne]
-      	idPremiereColonne=list(window.listeId()[0])
-
-      	for i in idPremiereColonne:
-      		celluleARemplir=document[i]
-      		identifiant=i.split(",")[0]
-
-
-      		chaine=index[int(identifiant)-1]
-
-      		chaine=" ".join(map(str,chaine))
-      		document[i].firstChild.textContent=chaine
-
-      def afficheBoutons(ev):
-      	montreIndex.style.visibility="hidden"
-      	document["msgApresIndice"].style.visibility="visible"
-      	btnOrdi.style.visibility="visible"
-      	btnJoueur.style.visibility="visible"
-
-
-
-
-      def afficher(ev):
-      	taille=int(window.listeId()[2])
-
-      	for j in range(1,taille+1):
-      		for i in range(1,taille+1):
-
-      			caseARemplir=document[f"{j},{i}"]
-
-      			if aResoudre.lignes[i-1][j-1].getValeur()==True:
-      				aAfficher="images/noir.jpg"
-      			elif aResoudre.lignes[i-1][j-1].getValeur()==False:
-      				aAfficher="images/croix.png"
-      			else:
-      				aAfficher="images/interrogation.jpg"
-
-
-      			caseARemplir.firstChild.src=aAfficher
-
-
-
-
-
-      montreIndex.bind("click",aleatoire)
-      montreIndex.bind("click",afficheIndexLigne)
-      montreIndex.bind("click",afficheIndexColonne)
-      montreIndex.bind("click",afficheBoutons)
-
-      btnOrdi.bind("click",afficher)
-    </script>
-  </body>
+	<head>
+		<meta charset="utf-8">
+		<title>Nonogramm</title>
+		<link rel="stylesheet" type="text/css" href="./style.css">
+		<script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js">
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/brython@3/brython_stdlib.js">
+		</script>
+	</head>
+
+
+	<body onload="brython()">
+		<h1>Nonogramm</h1>
+		<div>
+			<p>methode de creation de la grille</p>
+			<input class="btn" type="button" value="aleatoire" id="btn_aleatoire">
+			<input class="btn" type="button" value="index" id="btn_index">
+		</div>
+		
+		<div id="aleatoire" style="visibility: hidden;" >
+			<p id="message">attention, toutes valeures depassant 10 peu faire ralentir le proggramme</p>
+			<label for="entree_taille">rentrez la taille de la grille :</label>
+			<input type="number"  id="entree_taille">
+			<input class="btn" type="button" id="btn_valider" value="Validez">
+		</div>
+
+		
+		<div id="divTable">
+			<table id="grille">
+			</table>
+		</div>
+		<div>
+			<input type="button" id="montre_index" class="btn" value="creer les indices" style="display: none;">
+
+		</div>
+		<div id="remplissage">
+			<p id="msg_apres_indice">Par qui voulez vous que le nonogramm soit remplis ?</p>
+			
+			<div>
+			<input type="button" value="ordinateur" class="btn" id="ordi">
+			<input type="button" value="joueur" class="btn" id="joueur">
+			</div>
+		</div>
+
+		<script>
+
+			let btn_aleatoire=document.getElementById("btn_aleatoire")
+			let btn_index=document.getElementById("btn_index")
+			let btn_valider=document.getElementById("btn_valider")
+			let entree_taille=document.getElementById("entree_taille")
+			let btn_montre_index=document.getElementById("montre_index")
+			let grille=document.getElementById("grille")
+			let btn_ordi=document.getElementById("ordi")
+			let btn_joueur=document.getElementById("joueur")
+			
+			let taille=0
+			let id_premiere_colonne=[]
+			let id_premiere_ligne=[]
+			grille.border=1
+			
+
+			function montreZone(){
+
+				document.getElementById("aleatoire").style.visibility="visible"
+			}
+			
+
+
+			function construitGrille(event){
+				
+				if (event.type=="click" || event.key==="Enter"){
+					while (grille.rows.length > 0) {
+						grille.deleteRow(0)
+					}
+
+					const taille_image=(screen.width/entree_taille.value)/5
+					btn_montre_index.style.visibility="hidden"
+
+					if (entree_taille.value>0){
+						document.getElementById("remplissage").style.visibility="hidden"
+						btn_montre_index.style="visibility:visible"
+						
+						
+						taille=entree_taille.value
+
+						for (i=0;i<=taille;i++){
+							var ligne=grille.insertRow()
+
+							for (j=0;j<=taille;j++){
+								var image_blanche=document.createElement("img")
+								image_blanche.setAttribute("src","images/blanc.png")
+								image_blanche.setAttribute("width",taille_image)
+								image_blanche.setAttribute("length",taille_image)
+								var cellule=ligne.insertCell()
+								var paragraphe=document.createElement("p")
+								
+								if ((i!=0 && j!=0) || (i==j && i==0)){
+									
+									cellule.appendChild(image_blanche)
+								}else{
+									cellule.appendChild(paragraphe)
+								}
+								cellule.id=i+','+j
+							}
+						}
+						creerlisteId()
+					}
+				}
+			}
+
+			function creerlisteId(){
+				id_premiere_colonne=[]
+				id_premiere_ligne=[]
+				for(i=1;i<=taille;i++){
+					id_premiere_colonne.push(`${i},0`)
+					id_premiere_ligne.push(`0,${i}`)
+				}
+			
+			}
+			function listeId(){
+				return [id_premiere_colonne,id_premiere_ligne,taille]
+			}
+
+			btn_aleatoire.addEventListener("click",montreZone)
+			
+			entree_taille.addEventListener("keydown",construitGrille)
+			btn_valider.addEventListener("click",construitGrille)
+		</script>
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<script type="text/python">
+			from browser import document
+			from browser import html
+			from browser import window
+			from browser import alert
+			from nonogramm import Grille, Type
+
+			btn_valider=document["btn_valider"]
+			entree_taille=document["entree_taille"]
+			
+			tableau=document["grille"]
+
+			a_resoudre=Grille()
+			resolu=Grille()
+			btn_index=document["btn_index"]
+			btn_aleatoire=document["aleatoire"]
+			montre_index=document["montre_index"]
+			btn_ordi=document["ordi"]
+			btn_joueur=document["joueur"]
+			
+			id_premiere_ligne=[]
+			id_premiere_colonne=[]
+
+			def index(ev):
+
+			def aleatoire(ev):
+				if ev.type=="click":
+					ev.key="Enter"
+				if ev.key=="Enter" or ev.type=="click":
+
+					taille=window.listeId()[2]
+
+					if taille=='':
+						taille=0
+					taille=int(taille)
+					
+
+					if taille>0:
+						
+						a_resoudre.creerGrilleHasard(taille,taille)
+						resolu.remplace(a_resoudre)
+						a_resoudre.resoudBackTracking()
+						
+
+
+			def afficheIndexLigne(ev):
+				
+				index=a_resoudre.getPosition()[Type.ligne]
+				id_premiere_ligne=list(window.listeId()[1])
+
+				
+				for i in id_premiere_ligne:
+					
+					
+					cellule_a_remplir=document[i]
+					identifiant=i.split(",")[1]
+					
+					
+					chaine=index[int(identifiant)-1]
+					
+					chaine="<br>".join(map(str,chaine))
+
+					
+					document[i].removeChild(document[i].firstChild)
+					document[i] <= html.P(chaine)
+					
+					
+
+
+			def afficheIndexColonne(ev):
+				
+				index=a_resoudre.getPosition()[Type.colonne]
+				id_premiere_colonne=list(window.listeId()[0])
+				
+				for i in id_premiere_colonne:
+					cellule_a_remplir=document[i]
+					identifiant=i.split(",")[0]
+					
+
+					chaine=index[int(identifiant)-1]
+					
+					chaine=" ".join(map(str,chaine))
+					document[i].firstChild.textContent=chaine		
+				
+			def afficheBoutons(ev):
+				montre_index.style.visibility="hidden"	
+				document["remplissage"].style.visibility="visible"
+				document["msg_apres_indice"].text="Par qui voulez vous que le nonogramm soit remplis ?"
+				btn_ordi.value="ordinateur"
+				btn_joueur.style.visibility="visible"
+				
+				
+				
+				
+
+
+			def afficher(ev):
+				taille=int(window.listeId()[2])
+
+				for j in range(1,taille+1):
+					for i in range(1,taille+1):
+
+						case_a_remplir=document[f"{j},{i}"]
+
+						if a_resoudre.lignes[i-1][j-1].getValeur()==True:
+							aAfficher="images/noir.jpg"
+						elif a_resoudre.lignes[i-1][j-1].getValeur()==False:
+							aAfficher="images/croix.png"
+						else:
+							aAfficher="images/interrogation.jpg"
+						
+						
+						case_a_remplir.firstChild.src=aAfficher				
+			
+			def resolutionJoueur(ev):
+				taille=int(window.listeId()[2])
+				for j in range(1,taille+1):
+					for i in range(1,taille+1):
+
+						document[f"{j},{i}"].bind("click",caseClickerGauche)
+						document[f"{j},{i}"].bind("contextmenu",caseClickerDroit)
+				btn_joueur.style.visibility="hidden"
+				
+				document["msg_apres_indice"].text="Voulez vous que l'ordinateur finisse la solution ?"
+				btn_ordi.value="solution"
+
+
+			def caseClickerGauche(ev):
+				clicker=ev.target.parentElement.id
+				clicker=clicker.split(",")
+				if a_resoudre.lignes[int(clicker[1])-1][int(clicker[0])-1].getValeur() is True:
+					ev.target.src="images/noir.jpg"
+				else:
+					alert("mauvais signe")
+				if verifGrilleRempli():
+					alert("felicitation vous aver réussi la grille")
+
+			def caseClickerDroit(ev):
+				ev.preventDefault()
+				clicker=ev.target.parentElement.id
+				clicker=clicker.split(",")
+				if a_resoudre.lignes[int(clicker[1])-1][int(clicker[0])-1].getValeur() is False:
+					ev.target.src="images/croix.png"
+				else:
+					alert("mauvais signe")
+				
+				if verifGrilleRempli():
+					alert("felicitation vous aver rempli la grille")
+				
+			def verifGrilleRempli():
+				taille=int(window.listeId()[2])
+				for j in range(1,taille+1):
+					for i in range(1,taille+1):
+						
+						if document[f"{j},{i}"].firstChild.src=="http://127.0.0.1:5500/images/blanc.png":
+							return False
+				return True
+					
+			
+			btn_aleatoire.bind("click",montre_index.bind("click",aleatoire))
+			
+
+			btn_joueur.bind("click",resolutionJoueur)
+			
+			montre_index.bind("click",afficheIndexLigne)
+			montre_index.bind("click",afficheIndexColonne)
+			montre_index.bind("click",afficheBoutons)
+
+			btn_ordi.bind("click",afficher)
+		</script>
+	
+
+	</body>
 </html>
+

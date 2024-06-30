@@ -73,21 +73,22 @@ class Grille:
         self.grille = {}
 
     def copie(self):
-        """creer une copiede la grille seulement
-
-        Returns:
-            Grille: copie de la grille 
         """
-        tempo=Grille()
-        tempo.lignes=self.lignes[::]
-        tempo.colonnes=self.colonnes[::]
-        tempo.grille=dict(self.grille)
-        tempo.tailleColonne=self.tailleColonne
-        tempo.tailleLigne=self.tailleLigne
-        tempo._position=dict(self._position)
-        tempo._positionModifiable=dict(self._position)
-        
+        creer une copiede la grille seulement
+        """
+        tempo = Grille()
+        tempo.lignes = self.lignes[::]
+        tempo.colonnes = self.colonnes[::]
+        tempo.grille = dict(self.grille)
+        tempo.tailleColonne = self.tailleColonne
+        tempo.tailleLigne = self.tailleLigne
+        tempo._position = dict(self._position)
+        tempo._positionModifiable = dict(self._position)
+
         return tempo
+
+    def remplace(self, grille2):
+        self.__dict__.update(grille2.__dict__)
 
     def creerGrilleHasard(self, tailleLigne, tailleColonne=None, effacement=True):
         """creer une grille au hasard
@@ -777,9 +778,9 @@ class Grille:
 
             if grille_a_tester.getPosition() == self.getPosition():
 
-                resultat = grille_a_tester
+                self.remplace(grille_a_tester)
 
-                return resultat
+                return
 
     def afficher(self):
         for i in self.lignes:
@@ -795,7 +796,6 @@ class Grille:
                     self.remplis(Type.ligne, i)
                     self.remplis(Type.colonne, j)
 
-   
     def resoudBackTracking(self, liste_indice=None, liste_indice_a_tester=None, index_liste_indice=0, total_ligne=None, premiere_fois=True):
         def estPossibleColonne(self, grille):
             """
@@ -809,19 +809,16 @@ class Grille:
 
                 a_tester: list[int] = grille.getPosition()[Type.colonne][i]
                 position_reel: list[int] = self.getPosition()[Type.colonne][i]
-                
 
-                if (max(a_tester) > max(position_reel) or sum(a_tester) > sum(position_reel)) or (sum(a_tester)+len(a_tester)-1)>(sum(position_reel)+len(position_reel)-1):
+                if (max(a_tester) > max(position_reel) or sum(a_tester) > sum(position_reel)) or (sum(a_tester)+len(a_tester)-1) > (sum(position_reel)+len(position_reel)-1):
                     return False
-                
-                if len(a_tester)>len(position_reel):
+
+                if len(a_tester) > len(position_reel):
                     return False
                 for i in range(len(a_tester)):
-                    if a_tester[i]>position_reel[i]:
+                    if a_tester[i] > position_reel[i]:
                         return False
             return True
-
-        
 
         total_ligne: list[list[list[Case]]] = []
         liste_indice: list[int] = []
@@ -832,8 +829,8 @@ class Grille:
                 self._ligneBrutForce(i, self.tailleLigne))
         for i in total_ligne:
             liste_indice.append(len(i)-1)
-            
-        while True :  
+
+        while True:
             grille_a_tester = Grille()
             tempo: list[list[list[Case]]] = []
             if liste_indice_a_tester[index_liste_indice] is None:
@@ -859,21 +856,23 @@ class Grille:
                 for i in range(self.tailleColonne-len(tempo)):
                     tempo.append([Case()]*self.tailleLigne)
 
-            tempo=tempo[::]
-                
+            tempo = tempo[::]
+
             grille_a_tester.creerGrilleParLigne(tempo, False)
-            if index_liste_indice==7:
-                pass
-            if estPossibleColonne(self,grille_a_tester):
+
+            if estPossibleColonne(self, grille_a_tester):
                 if liste_indice_a_tester[-1] is not None:
 
-                    return grille_a_tester
+                    self.remplace(grille_a_tester)
+                    return
+
                 elif grille_a_tester.getPosition() == self.getPosition():
 
-                    return grille_a_tester
+                    self.remplace(grille_a_tester)
+                    return
                 else:
 
-                    index_liste_indice+=1
+                    index_liste_indice += 1
 
 
 if __name__ == "__main__":
@@ -885,17 +884,16 @@ if __name__ == "__main__":
         [[2,1],[3,1,1],[1,2,4],[4],[1,2,1,1],[2,2],[1,2,1],[2,1,1],[1,2,1],[4,1,1]]
         ) """
 
-    #grille.creerGrilleHasard(5)
+    grille.creerGrilleHasard(5)
 
-    grille.creerGrilleParIndex([[2, 1, 1], [4, 1, 1], [1, 2], [2, 1, 1, 2], [2, 1, 2], [3, 1, 3], [1, 2, 2], [1, 2, 4], [3], [1, 2, 2]],
-                               [[1, 4], [1, 3, 1], [2, 1, 1, 1], [3, 2, 1], [1, 1, 1], [1, 2], [1, 2, 2], [1, 6], [3, 3], [2, 1, 1, 2]])
-    
+    grille.creerGrilleParIndex([[2], [1, 1], [4], [1], [1, 1]],
+                               [[1], [1], [3, 1], [1, 1], [3]])
 
     print(grille.getPosition())
-    
+
     avant = time.time()
-    
-    grille = grille.resoudBackTracking()
+
+    grille.resoudBackTracking()
     grille.afficher()
     print(f"{round(time.time()-avant, 5)} s")
 

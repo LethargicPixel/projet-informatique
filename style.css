@@ -26,3 +26,10 @@ td > img {
   border-color: black;
   border-spacing: 0;
 }
+#remplissage {
+  flex-direction: column;
+  visibility: hidden;
+}
+#index {
+  display: none;
+}
