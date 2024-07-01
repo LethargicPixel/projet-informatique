@@ -13,7 +13,7 @@
 
 	<body onload="brython()">
 		<h1>Nonogramm</h1>
-		<div>
+		<div id="choix">
 			<p>methode de creation de la grille</p>
 			<input class="btn" type="button" value="aleatoire" id="btn_aleatoire">
 			<input class="btn" type="button" value="index" id="btn_index">
@@ -64,6 +64,7 @@
 			function montreZone(){
 
 				document.getElementById("aleatoire").style.visibility="visible"
+				document.getElementById("choix").style.display="none"
 			}
 			
 
@@ -100,6 +101,7 @@
 									
 									cellule.appendChild(image_blanche)
 								}else{
+									
 									cellule.appendChild(paragraphe)
 								}
 								cellule.id=i+','+j
@@ -123,10 +125,40 @@
 				return [id_premiere_colonne,id_premiere_ligne,taille]
 			}
 
+			function creerIndex(){
+				if (event.type=="click" || event.key==="Enter"){
+					
+					for (i=0;i<id_premiere_ligne.length;i++){
+						
+						input=document.createElement("input")
+						input.type="text"
+						input.value=0
+						case_a_changer=document.getElementById(id_premiere_ligne[i])
+						case_a_changer.removeChild(case_a_changer.lastChild)
+						case_a_changer.appendChild(input)
+					}
+					
+					for (i=0;i<id_premiere_colonne.length;i++){
+						input=document.createElement("input")
+						input.type="text"
+						input.value=0
+						case_a_changer=document.getElementById(id_premiere_colonne[i])
+						case_a_changer.removeChild(case_a_changer.lastChild)
+						case_a_changer.appendChild(input)
+					}
+				}
+			}
+
 			btn_aleatoire.addEventListener("click",montreZone)
+			btn_index.addEventListener("click",montreZone)
+
 			
 			entree_taille.addEventListener("keydown",construitGrille)
 			btn_valider.addEventListener("click",construitGrille)
+			
+			btn_index.addEventListener("click",()=>{btn_valider.addEventListener("click",creerIndex)})
+			btn_index.addEventListener("click",()=>{entree_taille.addEventListener("keydown",creerIndex)})
+
 		</script>
 
 
@@ -172,6 +204,7 @@
 			id_premiere_colonne=[]
 
 			def index(ev):
+				return
 
 			def aleatoire(ev):
 				if ev.type=="click":
@@ -230,7 +263,8 @@
 					chaine=index[int(identifiant)-1]
 					
 					chaine=" ".join(map(str,chaine))
-					document[i].firstChild.textContent=chaine		
+					document[i].removeChild(document[i].firstChild)
+					document[i] <= html.P(chaine)	
 				
 			def afficheBoutons(ev):
 				montre_index.style.visibility="hidden"	
@@ -256,8 +290,7 @@
 							aAfficher="images/noir.jpg"
 						elif a_resoudre.lignes[i-1][j-1].getValeur()==False:
 							aAfficher="images/croix.png"
-						else:
-							aAfficher="images/interrogation.jpg"
+						
 						
 						
 						case_a_remplir.firstChild.src=aAfficher				
@@ -295,7 +328,7 @@
 					alert("mauvais signe")
 				
 				if verifGrilleRempli():
-					alert("felicitation vous aver rempli la grille")
+					alert("felicitation vous aver reussi la grille")
 				
 			def verifGrilleRempli():
 				taille=int(window.listeId()[2])
@@ -305,10 +338,27 @@
 						if document[f"{j},{i}"].firstChild.src=="http://127.0.0.1:5500/images/blanc.png":
 							return False
 				return True
+			
+			def index(ev):
+				id_ligne=window.listeId()[1]
+				id_colonne=window.listeId()[0]
+				indexs=[[],[]]
+				for i in id_ligne:
+					valeur=document[i].firstChild.value
 					
-			
+					
+					indexs[0].append(list(map(int,valeur.split(" "))))
+				
+				for i in id_colonne:
+					valeur=document[i].firstChild.value
+					
+					indexs[1].append(list(map(int,valeur.split(" "))))
+				a_resoudre.creerGrilleParIndex(indexs[0],indexs[1])
+				resolu.remplace(a_resoudre)
+				a_resoudre.resoudBackTracking()
+				
 			btn_aleatoire.bind("click",montre_index.bind("click",aleatoire))
-			
+			btn_index.bind("click",montre_index.bind("click",index))
 
 			btn_joueur.bind("click",resolutionJoueur)
 			

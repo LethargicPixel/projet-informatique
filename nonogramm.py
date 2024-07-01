@@ -122,7 +122,7 @@ class Grille:
         self.grille = {Type.colonne: self.colonnes, Type.ligne: self.lignes}
         self._positionsFinal(effacement)
 
-    def creerGrilleParIndex(self, *positions: list[list[int]]) -> None:
+    def creerGrilleParIndex(self, *positions: list[list[int]]) -> bool:
         """creer une grille avec les coordonnee donné en parametre
 
         Args:
@@ -170,6 +170,7 @@ class Grille:
 
         self.grille = {Type.colonne: self.colonnes, Type.ligne: self.lignes}
         self._position_modifiable = dict(self._position)
+        return True
 
     def creerGrilleParLigne(self, liste_ligne: list[list[Case]], effacement: bool = True) -> None:
 
@@ -819,10 +820,7 @@ class Grille:
                     self.remplace(grille_a_tester)
                     return
 
-                elif grille_a_tester.getPosition() == self.getPosition():
 
-                    self.remplace(grille_a_tester)
-                    return
                 else:
 
                     index_liste_indice += 1
@@ -837,10 +835,10 @@ if __name__ == "__main__":
         [[2,1],[3,1,1],[1,2,4],[4],[1,2,1,1],[2,2],[1,2,1],[2,1,1],[1,2,1],[4,1,1]]
         ) """
 
-    grille.creerGrilleHasard(5)
+    #grille.creerGrilleHasard(5)
 
-    grille.creerGrilleParIndex([[2], [1, 1], [4], [1], [1, 1]],
-                               [[1], [1], [3, 1], [1, 1], [3]])
+    grille.creerGrilleParIndex([[0], [0]],
+                               [[0], [0]])
 
     print(grille.getPosition())
 
@@ -849,7 +847,7 @@ if __name__ == "__main__":
     grille.resoudBackTracking()
     grille.afficher()
     print(f"{round(time.time()-avant, 5)} s")
-
+ 
     """ 
     #grille.resoud()
     print()
