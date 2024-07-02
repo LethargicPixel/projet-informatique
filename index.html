@@ -353,7 +353,7 @@
 					valeur=document[i].firstChild.value
 					
 					indexs[1].append(list(map(int,valeur.split(" "))))
-				a_resoudre.creerGrilleParIndex(indexs[0],indexs[1])
+				a_resoudre.creerGrilleParIndex(indexs[1],indexs[0])
 				resolu.remplace(a_resoudre)
 				a_resoudre.resoudBackTracking()
 				
